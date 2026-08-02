@@ -12,6 +12,7 @@
 </p>
 
 ---
+<img width="1426" height="771" alt="Image" src="https://github.com/user-attachments/assets/6a2e171c-3998-446f-96a7-4ed6708ad6f7" />
 
 ## 🚀 Instalación en 1 Paso
 
