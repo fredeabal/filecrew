@@ -56,6 +56,19 @@ git fetch origin
 git reset --hard origin/main
 
 echo -e "${YELLOW}⏳ [2/5] Actualizando dependencias de PHP (Composer)...${NC}"
+
+# Opcional: Actualizar dominio si ha cambiado
+echo ""
+echo -ne "${YELLOW}¿El dominio o subdominio ha cambiado? (s/N): ${NC}"
+read update_domain
+if [[ "$update_domain" == "s" || "$update_domain" == "S" ]]; then
+    echo -ne "${YELLOW}Introduce el nuevo dominio (ej: files.tuempresa.com): ${NC}"
+    read new_domain
+    sed -i "s|^app.baseURL = .*|app.baseURL = 'https://${new_domain}/'|" "$INSTALL_DIR/.env"
+    echo -e "${GREEN}✅ Dominio actualizado a https://${new_domain}/${NC}"
+    echo ""
+fi
+
 export COMPOSER_ALLOW_SUPERUSER=1
 composer install --no-dev --optimize-autoloader --no-interaction
 
