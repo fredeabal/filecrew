@@ -49,12 +49,12 @@
                             <div class="mt-3 d-none" id="file-info-block-new">
                                 <div class="p-3 bg-light-primary rounded d-flex align-items-center justify-content-between border border-primary">
                                     <div class="d-flex align-items-center gap-3 flex-grow-1 me-3">
-                                        <div class="p-2 bg-primary text-white rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <div class="p-2 bg-primary text-white rounded d-flex align-items-center justify-content-center file-icon-box">
                                             <i class="ti ti-file-upload fs-5"></i>
                                         </div>
                                         <div class="flex-grow-1 d-flex flex-wrap align-items-center justify-content-between gap-2">
                                             <div>
-                                                <h6 class="mb-0 fw-semibold text-truncate text-primary" id="info-filename" style="max-width: 300px;">nombre_archivo.zip</h6>
+                                                <h6 class="mb-0 fw-semibold text-truncate text-primary max-w-300" id="info-filename">nombre_archivo.zip</h6>
                                                 <small class="text-muted" id="info-filesize">0 KB</small>
                                             </div>
                                             <span class="badge bg-primary badge-replace-file">Reemplazará al actual</span>
@@ -70,7 +70,7 @@
                             <label for="filename" class="form-label fw-semibold">Nombre del Archivo</label>
                             <div class="form-control p-0 d-flex align-items-center overflow-hidden">
                                 <span class="text-primary ps-3 pe-2"><i class="ti ti-file-description"></i></span>
-                                <input type="text" name="filename" id="filename" value="<?= esc(pathinfo($share->filename, PATHINFO_FILENAME)) ?>" required class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                <input type="text" name="filename" id="filename" value="<?= esc(pathinfo($share->filename, PATHINFO_FILENAME)) ?>" class="px-1 py-2 input-transparent">
                                 <span class="pe-3 fw-bold text-muted"><?= pathinfo($share->filename, PATHINFO_EXTENSION) ? '.' . esc(pathinfo($share->filename, PATHINFO_EXTENSION)) : '' ?></span>
                             </div>
                             <small class="text-muted mt-1 d-block">
@@ -94,7 +94,7 @@
                                 <label for="download_limit" class="form-label fw-semibold">Límite máximo de descargas (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden">
                                     <span class="text-primary ps-3 pe-2"><i class="ti ti-download"></i></span>
-                                    <input type="number" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" value="<?= esc($share->download_limit ?? '') ?>" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <input type="number" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" value="<?= esc($share->download_limit ?? '') ?>" class="px-1 py-2 input-transparent">
                                 </div>
                                 <?php if (!empty($share->download_count)): ?>
                                     <small class="text-muted d-block mt-1">Descargas actuales: <?= $share->download_count ?></small>
@@ -105,8 +105,8 @@
                             <div class="col-md-6">
                                 <label for="expires_at" class="form-label fw-semibold">Fecha de Caducidad (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden datepicker">
-                                    <span class="text-primary ps-3 pe-2" style="cursor: pointer;" data-toggle><i class="ti ti-calendar-time"></i></span>
-                                    <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input value="<?= !empty($share->expires_at) ? date('d/m/Y', strtotime($share->expires_at)) : '' ?>" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <span class="text-primary ps-3 pe-2 cursor-pointer" data-toggle><i class="ti ti-calendar-time"></i></span>
+                                    <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input value="<?= !empty($share->expires_at) ? date('d/m/Y', strtotime($share->expires_at)) : '' ?>" class="px-1 py-2 input-transparent">
                                 </div>
 
                             </div>

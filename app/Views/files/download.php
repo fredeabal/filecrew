@@ -33,7 +33,7 @@
                         <!-- =====================================================================
                              DESCARGA DE ARCHIVO DISPONIBLE
                              ===================================================================== -->
-                        <h3 class="fw-bold mb-1 text-truncate text-center text-primary" style="max-width: 100%;"><?= esc($share->filename) ?></h3>
+                        <h3 class="fw-bold mb-1 text-truncate text-center text-primary max-w-100"><?= esc($share->filename) ?></h3>
                         <p class="text-muted mb-4 text-center">Tamaño: <span class="fw-semibold text-dark"><?= esc($fileSizeFormatted) ?></span></p>
 
                          <div class="p-3 bg-light-primary rounded mb-4 text-start">
@@ -57,7 +57,7 @@
                                 <?php if (!empty($fileHash)): ?>
                                     <div class="col-12 mt-4 pt-3 border-top">
                                         <div class="d-flex align-items-center justify-content-between mb-2">
-                                            <span class="fw-semibold text-uppercase text-muted" style="letter-spacing: 0.5px;">Firma Digital SHA-256</span>
+                                            <span class="fw-semibold text-uppercase text-muted letter-spacing-sm">Firma Digital SHA-256</span>
                                             <button class="btn btn-sm btn-light-primary text-primary d-flex align-items-center gap-1 rounded-pill px-3 shadow-none" 
                                                     onclick="navigator.clipboard.writeText('<?= esc($fileHash) ?>'); window.systemAlert && window.systemAlert.fire({ icon: 'success', title: '¡Completado!', html: '<div class=\'text-center\'>Hash copiado al portapapeles</div>', iconColor: '#10B981', timer: 2000 });" 
                                                     title="Copiar Hash">

@@ -41,11 +41,11 @@
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="smtp_host" class="form-label fw-semibold">Servidor SMTP (Host)</label>
-                                <input type="text" class="form-control" id="smtp_host" name="smtp_host" value="<?= old('smtp_host', esc($smtp_host ?? '')) ?>" placeholder="Ej: smtp.gmail.com" required>
+                                <input type="text" class="form-control" id="smtp_host" name="smtp_host" value="<?= old('smtp_host', esc($smtp_host ?? '')) ?>" placeholder="Ej: smtp.gmail.com">
                             </div>
                             <div class="col-md-6">
                                 <label for="smtp_port" class="form-label fw-semibold">Puerto SMTP</label>
-                                <input type="number" class="form-control" id="smtp_port" name="smtp_port" value="<?= old('smtp_port', esc($smtp_port ?? '')) ?>" placeholder="Ej: 587" required>
+                                <input type="number" class="form-control" id="smtp_port" name="smtp_port" value="<?= old('smtp_port', esc($smtp_port ?? '')) ?>" placeholder="Ej: 587">
                             </div>
                         </div>
 

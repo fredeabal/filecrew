@@ -317,6 +317,37 @@
 .cursor-pointer {
     cursor: pointer !important;
 }
+
+/* =============================================
+   Utilidades para Formularios y UI (Rule 9 Compliant)
+   ============================================= */
+.input-transparent {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    color: inherit;
+}
+.input-transparent:focus {
+    outline: none;
+}
+.file-icon-box {
+    width: 40px;
+    height: 40px;
+}
+.max-w-300 {
+    max-width: 300px;
+}
+.max-w-100 {
+    max-width: 100%;
+}
+.text-xs {
+    font-size: 0.75rem;
+}
+.letter-spacing-sm {
+    letter-spacing: 0.5px;
+}
+
 .switch-custom-size {
     width: 2.5em !important;
     height: 1.25em !important;

@@ -48,11 +48,11 @@
                             <div class="mt-3 d-none" id="file-info-block">
                                 <div class="p-3 bg-light-primary rounded d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center gap-3">
-                                        <div class="p-2 bg-primary text-white rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <div class="p-2 bg-primary text-white rounded d-flex align-items-center justify-content-center file-icon-box">
                                             <i class="ti ti-file-description fs-5"></i>
                                         </div>
                                         <div>
-                                            <h6 class="mb-0 fw-semibold text-truncate" id="info-filename" style="max-width: 300px;">nombre_archivo.zip</h6>
+                                            <h6 class="mb-0 fw-semibold text-truncate max-w-300" id="info-filename">nombre_archivo.zip</h6>
                                             <small class="text-muted" id="info-filesize">0 KB</small>
                                         </div>
                                     </div>
@@ -70,10 +70,10 @@
                                 <label for="filename" class="form-label fw-semibold">Nombre del Archivo</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden">
                                     <span class="text-primary ps-3 pe-2"><i class="ti ti-file-description"></i></span>
-                                    <input type="text" name="filename" id="filename" placeholder="nombre-archivo" required class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <input type="text" name="filename" id="filename" placeholder="nombre-archivo" class="px-1 py-2 input-transparent">
                                     <span id="filename-ext" class="pe-3 fw-bold text-muted"></span>
                                 </div>
-                                <small class="form-text text-muted mt-1" style="font-size: 0.75rem;">Se autocompletará al seleccionar un archivo.</small>
+                                <small class="form-text text-muted mt-1 text-xs">Se autocompletará al seleccionar un archivo.</small>
                             </div>
                         </div>
 
@@ -83,9 +83,9 @@
                                 <label for="custom_slug" class="form-label fw-semibold">Enlace Personalizado (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden">
                                     <span class="text-primary ps-3 pe-1 text-nowrap"><?= base_url('s/') ?></span>
-                                    <input type="text" name="custom_slug" id="custom_slug" placeholder="mi-archivo" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <input type="text" name="custom_slug" id="custom_slug" placeholder="mi-archivo" class="px-1 py-2 input-transparent">
                                 </div>
-                                <small class="form-text text-muted mt-1" style="font-size: 0.75rem;">Dejar vacío para generar uno aleatorio.</small>
+                                <small class="form-text text-muted mt-1 text-xs">Dejar vacío para generar uno aleatorio.</small>
                             </div>
 
                             <!-- Contraseña -->
@@ -93,7 +93,7 @@
                                 <label for="password" class="form-label fw-semibold">Contraseña de acceso (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden">
                                     <span class="text-primary ps-3 pe-2"><i class="ti ti-lock"></i></span>
-                                    <input type="password" name="password" id="password" placeholder="Establecer contraseña" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <input type="password" name="password" id="password" placeholder="Establecer contraseña" class="px-1 py-2 input-transparent">
                                     <button class="btn border-0 bg-transparent text-muted px-3" type="button" id="toggle-password">
                                         <i class="ti ti-eye"></i>
                                     </button>
@@ -107,7 +107,7 @@
                                 <label for="download_limit" class="form-label fw-semibold">Límite máximo de descargas (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden">
                                     <span class="text-primary ps-3 pe-2"><i class="ti ti-download"></i></span>
-                                    <input type="number" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <input type="number" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" class="px-1 py-2 input-transparent">
                                 </div>
                             </div>
 
@@ -115,8 +115,8 @@
                             <div class="col-md-6">
                                 <label for="expires_at" class="form-label fw-semibold">Fecha de Caducidad (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden datepicker">
-                                    <span class="text-primary ps-3 pe-2" style="cursor: pointer;" data-toggle><i class="ti ti-calendar-time"></i></span>
-                                    <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <span class="text-primary ps-3 pe-2 cursor-pointer" data-toggle><i class="ti ti-calendar-time"></i></span>
+                                    <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input class="px-1 py-2 input-transparent">
                                 </div>
                             </div>
                         </div>
