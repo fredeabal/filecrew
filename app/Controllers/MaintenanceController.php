@@ -70,7 +70,16 @@ class MaintenanceController extends BaseController
         $debugCount = $this->cleanDirectory(WRITEPATH . 'debugbar');
         $logsCount = $this->cleanDirectory(WRITEPATH . 'logs');
 
-        return redirect()->to(base_url('settings/maintenance'))->with('message', "Mantenimiento general completado.<br><small class='text-muted'>{$sessionsCount} sesiones, {$debugCount} debugs y {$logsCount} logs eliminados.</small>");
+        $dbStatus = "";
+        try {
+            $db = \Config\Database::connect();
+            $db->query('VACUUM;');
+            $dbStatus = "Base de datos desfragmentada y optimizada.";
+        } catch (\Exception $e) {
+            $dbStatus = "Error al desfragmentar BD.";
+        }
+
+        return redirect()->to(base_url('settings/maintenance'))->with('message', "Mantenimiento general completado. {$dbStatus}<br><small class='text-muted'>{$sessionsCount} sesiones, {$debugCount} debugs y {$logsCount} logs eliminados.</small>");
     }
 
     // ---------------------------------------------------------------------
