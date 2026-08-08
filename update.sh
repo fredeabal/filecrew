@@ -6,22 +6,13 @@
 # =================================================================================
 
 # Asegurar que el script se ejecute desde una copia temporal para evitar problemas de desfase de bytes si se actualiza a sí mismo en disco
-if [ -z "$FILECREW_SELF_RUN" ]; then
-    if [ ! -t 0 ]; then
-        # Se ejecuta mediante curl/pipe
-        TMP_SCRIPT=$(mktemp /tmp/filecrew_update.XXXXXX)
-        cat > "$TMP_SCRIPT"
-        chmod +x "$TMP_SCRIPT"
-        export FILECREW_SELF_RUN=1
-        exec "$TMP_SCRIPT" "$@" < /dev/tty
-    elif [ -f "$0" ] && grep -q "FILECREW - AUTOMATIC UPDATER SCRIPT" "$0" 2>/dev/null; then
-        # Se ejecuta localmente desde archivo físico
-        TMP_SCRIPT=$(mktemp /tmp/filecrew_update.XXXXXX)
-        cp "$0" "$TMP_SCRIPT"
-        chmod +x "$TMP_SCRIPT"
-        export FILECREW_SELF_RUN=1
-        exec "$TMP_SCRIPT" "$@"
-    fi
+# Solo es necesario si se ejecuta localmente desde un archivo físico (si no, está en memoria/pipe y no hay bug de desfase)
+if [ -z "$FILECREW_SELF_RUN" ] && [ -f "$0" ] && grep -q "FILECREW - AUTOMATIC UPDATER SCRIPT" "$0" 2>/dev/null; then
+    TMP_SCRIPT=$(mktemp /tmp/filecrew_update.XXXXXX)
+    cp "$0" "$TMP_SCRIPT"
+    chmod +x "$TMP_SCRIPT"
+    export FILECREW_SELF_RUN=1
+    exec "$TMP_SCRIPT" "$@"
 fi
 
 # Colores para salida de terminal
