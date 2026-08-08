@@ -140,7 +140,7 @@
                         <div class="d-grid py-4 px-7 pt-8">
                           <a href="<?= url_to('logout') ?>" class="btn btn-outline-primary w-100">Cerrar Sesión</a>
                           <div class="text-center mt-4 fs-2 text-muted">
-                            <small>FileCrew - 1.0.0</small>
+                            <small>FileCrew - 1.1.0</small>
                           </div>
                         </div>
                       </div>
