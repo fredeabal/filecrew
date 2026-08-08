@@ -97,7 +97,6 @@
                                                 <h6 class="mb-0 fw-semibold text-truncate file-name-truncate">
                                                     <?= esc($file->filename) ?>
                                                 </h6>
-                                                <small class="text-muted fw-bold"><?= esc(strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION) ?: 'ARCHIVO')) ?></small>
                                             </div>
                                         </div>
                                     </td>

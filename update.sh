@@ -5,10 +5,14 @@
 # Este script descarga e instala la última versión de FileCrew sin perder datos.
 # =================================================================================
 
-# Si se ejecuta mediante curl/pipe, guardar en un archivo temporal y reconectar la terminal
-if [ ! -t 0 ] && [ -z "$FILECREW_SELF_RUN" ]; then
+# Asegurar que el script se ejecute desde una copia temporal para evitar problemas de desfase de bytes si se actualiza a sí mismo en disco
+if [ -z "$FILECREW_SELF_RUN" ]; then
     TMP_SCRIPT=$(mktemp /tmp/filecrew_update.XXXXXX.sh)
-    cat > "$TMP_SCRIPT"
+    if [ -f "$0" ] && grep -q "FILECREW - AUTOMATIC UPDATER SCRIPT" "$0" 2>/dev/null; then
+        cp "$0" "$TMP_SCRIPT"
+    else
+        cat > "$TMP_SCRIPT"
+    fi
     chmod +x "$TMP_SCRIPT"
     export FILECREW_SELF_RUN=1
     exec "$TMP_SCRIPT" "$@" < /dev/tty
