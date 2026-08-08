@@ -65,30 +65,26 @@
                             </div>
                         </div>
 
-                        <!-- Bloque de información del archivo existente -->
+                        <!-- Nombre del archivo -->
                         <div class="mb-4">
-                            <h5 class="fw-semibold mb-3">Archivo Seleccionado</h5>
-                            <div class="p-3 bg-light-primary rounded d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="p-2 bg-primary text-white rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                        <i class="ti ti-file-description fs-5"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="mb-0 fw-semibold text-truncate" style="max-width: 300px;"><?= esc($share->filename) ?></h6>
-                                        <small class="text-muted">
-                                            <?php
-                                                $bytes = $share->file_size;
-                                                $units = ['B', 'KB', 'MB', 'GB'];
-                                                $bytes = max($bytes, 0);
-                                                $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-                                                $pow = min($pow, count($units) - 1);
-                                                $bytes /= pow(1024, $pow);
-                                                echo round($bytes, 2) . ' ' . $units[$pow];
-                                            ?>
-                                        </small>
-                                    </div>
-                                </div>
+                            <label for="filename" class="form-label fw-semibold">Nombre del Archivo</label>
+                            <div class="form-control p-0 d-flex align-items-center overflow-hidden">
+                                <span class="text-primary ps-3 pe-2"><i class="ti ti-file-description"></i></span>
+                                <input type="text" name="filename" id="filename" value="<?= esc(pathinfo($share->filename, PATHINFO_FILENAME)) ?>" required class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                <span class="pe-3 fw-bold text-muted"><?= pathinfo($share->filename, PATHINFO_EXTENSION) ? '.' . esc(pathinfo($share->filename, PATHINFO_EXTENSION)) : '' ?></span>
                             </div>
+                            <small class="text-muted mt-1 d-block">
+                                Tamaño actual: 
+                                <?php
+                                    $bytes = $share->file_size;
+                                    $units = ['B', 'KB', 'MB', 'GB'];
+                                    $bytes = max($bytes, 0);
+                                    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+                                    $pow = min($pow, count($units) - 1);
+                                    $bytes /= pow(1024, $pow);
+                                    echo round($bytes, 2) . ' ' . $units[$pow];
+                                ?>
+                            </small>
                         </div>
 
                         <!-- Opciones de Compartición -->
@@ -96,7 +92,10 @@
                             <!-- Límite de descargas -->
                             <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="download_limit" class="form-label fw-semibold">Límite máximo de descargas (Opcional)</label>
-                                <input type="number" class="form-control" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" value="<?= esc($share->download_limit ?? '') ?>">
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden">
+                                    <span class="text-primary ps-3 pe-2"><i class="ti ti-download"></i></span>
+                                    <input type="number" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" value="<?= esc($share->download_limit ?? '') ?>" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                </div>
                                 <?php if (!empty($share->download_count)): ?>
                                     <small class="text-muted d-block mt-1">Descargas actuales: <?= $share->download_count ?></small>
                                 <?php endif; ?>
@@ -105,17 +104,11 @@
                             <!-- Fecha de expiración -->
                             <div class="col-md-6">
                                 <label for="expires_at" class="form-label fw-semibold">Fecha de Caducidad (Opcional)</label>
-                                <div class="input-group datepicker">
-                                    <input type="text" class="form-control" name="expires_at" id="expires_at" placeholder="Seleccionar fecha y hora" data-input value="<?= !empty($share->expires_at) ? date('Y-m-d H:i', strtotime($share->expires_at)) : '' ?>">
-                                    <button class="btn bg-transparent border text-muted" type="button" data-toggle>
-                                        <i class="ti ti-calendar"></i>
-                                    </button>
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden datepicker">
+                                    <span class="text-primary ps-3 pe-2" style="cursor: pointer;" data-toggle><i class="ti ti-calendar-time"></i></span>
+                                    <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input value="<?= !empty($share->expires_at) ? date('d/m/Y', strtotime($share->expires_at)) : '' ?>" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
                                 </div>
-                                <?php if (!empty($share->expires_at)): ?>
-                                    <small class="text-muted d-block mt-1">
-                                        Vence el: <?= date('d/m/Y H:i', strtotime($share->expires_at)) ?>
-                                    </small>
-                                <?php endif; ?>
+
                             </div>
                         </div>
 
@@ -126,8 +119,8 @@
                                     <input class="form-check-input" type="checkbox" role="switch" id="auto_destroy" name="auto_destroy" value="1" <?= $share->auto_destroy ? 'checked' : '' ?> onchange="document.getElementById('auto_destroy_warning').classList.toggle('d-none', !this.checked)">
                                     <label class="form-check-label fw-semibold" for="auto_destroy">Autodestrucción</label>
                                 </div>
-                                <div id="auto_destroy_warning" class="alert alert-primary mt-4 border border-primary <?= $share->auto_destroy ? '' : 'd-none' ?> p-2 small" role="alert">
-                                    El archivo se borrará físicamente del servidor al caducar o alcanzar su límite.
+                                <div id="auto_destroy_warning" class="text-primary mt-2 small <?= $share->auto_destroy ? '' : 'd-none' ?>">
+                                    <i class="ti ti-info-circle me-1"></i>El archivo se borrará físicamente del servidor al caducar o alcanzar su límite.
                                 </div>
                             </div>
                         </div>
@@ -164,6 +157,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 infoFilename.textContent = file.name;
                 infoFilesize.textContent = formatBytes(file.size);
                 fileInfoBlockNew.classList.remove('d-none');
+                
+                // Actualizar el input del nombre de archivo si el usuario selecciona un nuevo archivo
+                const filenameInput = document.getElementById('filename');
+                if (filenameInput) {
+                    filenameInput.value = file.name;
+                }
             } else {
                 fileInfoBlockNew.classList.add('d-none');
             }

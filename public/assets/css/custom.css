@@ -609,3 +609,38 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
 }
+
+/* =============================================
+   Bootstrap Datepicker Custom Styles
+   ============================================= */
+.datepicker table tr td.today, 
+.datepicker table tr td.today:hover, 
+.datepicker table tr td.today.disabled, 
+.datepicker table tr td.today.disabled:hover {
+    background-color: var(--bs-primary-bg-subtle) !important;
+    border: 1px solid var(--bs-primary) !important;
+    color: inherit !important;
+}
+.datepicker table tr td.active, 
+.datepicker table tr td.active:hover {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+/* Dark Mode para el Datepicker */
+[data-bs-theme="dark"] .datepicker {
+    background-color: var(--bs-card-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    color: #f8f9fa !important;
+}
+[data-bs-theme="dark"] .datepicker table tr td.day:hover,
+[data-bs-theme="dark"] .datepicker table tr td.focused {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+[data-bs-theme="dark"] .datepicker .datepicker-switch:hover, 
+[data-bs-theme="dark"] .datepicker .prev:hover, 
+[data-bs-theme="dark"] .datepicker .next:hover, 
+[data-bs-theme="dark"] .datepicker tfoot tr th:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}

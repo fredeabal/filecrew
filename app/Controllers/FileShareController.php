@@ -76,6 +76,14 @@ class FileShareController extends BaseController
                     'max_size' => 'El archivo supera el límite de subida permitido.'
                 ]
             ],
+            'filename' => [
+                'label' => 'nombre del archivo',
+                'rules' => 'required|max_length[255]',
+                'errors' => [
+                    'required' => 'El nombre del archivo es obligatorio.',
+                    'max_length' => 'El nombre del archivo no puede superar los 255 caracteres.'
+                ]
+            ],
             'download_limit' => [
                 'label' => 'límite de descargas',
                 'rules' => 'permit_empty|numeric|greater_than[0]',
@@ -86,9 +94,9 @@ class FileShareController extends BaseController
             ],
             'expires_at' => [
                 'label' => 'fecha de expiración',
-                'rules' => 'permit_empty|valid_date[Y-m-d H:i]',
+                'rules' => 'permit_empty|valid_date[d/m/Y]',
                 'errors' => [
-                    'valid_date' => 'La fecha de expiración debe ser una fecha y hora válida.'
+                    'valid_date' => 'La fecha de expiración debe tener el formato válido (DD/MM/YYYY).'
                 ]
             ],
             'custom_slug' => [
@@ -154,12 +162,37 @@ class FileShareController extends BaseController
         // Visibilidad pública o privada
         $isPublic = $this->request->getPost('is_public') !== null ? (int)$this->request->getPost('is_public') : 1;
         $autoDestroy = $this->request->getPost('auto_destroy') ? 1 : 0;
+        
+        $expiresAt = $this->request->getPost('expires_at');
+        if (!empty($expiresAt)) {
+            $dateObj = \DateTime::createFromFormat('d/m/Y', $expiresAt);
+            if ($dateObj !== false) {
+                $expiresAt = $dateObj->format('Y-m-d') . ' 23:59:59';
+            } else {
+                $expiresAt = null;
+            }
+        } else {
+            $expiresAt = null;
+        }
+
+        // Nombre de archivo
+        $fileName = $this->request->getPost('filename');
+        $originalName = $file->getClientName();
+        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        
+        if (empty($fileName)) {
+            $fileName = $originalName;
+        } else {
+            if (!empty($extension) && !preg_match("/\.$extension$/i", $fileName)) {
+                $fileName .= '.' . $extension;
+            }
+        }
 
         // Guardar metadata en BD
         $this->fileShareModel->save([
             'slug'           => $slug,
             'user_id'        => auth()->id(),
-            'filename'       => $file->getClientName(),
+            'filename'       => $fileName,
             'storage_name'   => $storageName,
             'file_size'      => $file->getSize(),
             'mime_type'      => $file->getClientMimeType(),
@@ -209,6 +242,14 @@ class FileShareController extends BaseController
         }
 
         $validationRules = [
+            'filename' => [
+                'label' => 'nombre del archivo',
+                'rules' => 'required|max_length[255]',
+                'errors' => [
+                    'required' => 'El nombre del archivo es obligatorio.',
+                    'max_length' => 'El nombre del archivo no puede superar los 255 caracteres.'
+                ]
+            ],
             'download_limit' => [
                 'label' => 'límite de descargas',
                 'rules' => 'permit_empty|numeric|greater_than[0]',
@@ -219,9 +260,9 @@ class FileShareController extends BaseController
             ],
             'expires_at' => [
                 'label' => 'fecha de expiración',
-                'rules' => 'permit_empty|valid_date[Y-m-d H:i]',
+                'rules' => 'permit_empty|valid_date[d/m/Y]',
                 'errors' => [
-                    'valid_date' => 'La fecha de expiración debe ser una fecha y hora válida.'
+                    'valid_date' => 'La fecha de expiración debe tener el formato válido (DD/MM/YYYY).'
                 ]
             ]
         ];
@@ -243,8 +284,11 @@ class FileShareController extends BaseController
         // Calcular expiración
         $expiresAt = null;
         $expiresAtInput = $this->request->getPost('expires_at');
-        if ($expiresAtInput !== null && $expiresAtInput !== '') {
-            $expiresAt = Time::parse($expiresAtInput)->toDateTimeString();
+        if (!empty($expiresAtInput)) {
+            $dateObj = \DateTime::createFromFormat('d/m/Y', $expiresAtInput);
+            if ($dateObj !== false) {
+                $expiresAt = $dateObj->format('Y-m-d') . ' 23:59:59';
+            }
         }
 
         // Obtener límite de descargas
@@ -263,7 +307,7 @@ class FileShareController extends BaseController
 
         // Verificar si se subió un archivo físico nuevo para reemplazar
         $file = $this->request->getFile('uploaded_file');
-        $fileName = $share->filename;
+        $fileName = $this->request->getPost('filename');
         $fileSize = $share->file_size;
         $storageName = $share->storage_name;
 
@@ -279,11 +323,20 @@ class FileShareController extends BaseController
             $newStorageName = $file->getRandomName();
             
             if ($file->move($uploadPath, $newStorageName)) {
-                $fileName = $file->getClientName();
                 $fileSize = $file->getSize();
                 $storageName = $newStorageName;
             } else {
                 return redirect()->back()->withInput()->with('error', 'Fallo al guardar el nuevo archivo en el servidor.');
+            }
+        }
+
+        // Asegurar que el nombre tenga la extensión correcta
+        if (empty($fileName)) {
+            $fileName = ($file && $file->isValid()) ? $file->getClientName() : $share->filename;
+        } else {
+            $extension = ($file && $file->isValid()) ? pathinfo($file->getClientName(), PATHINFO_EXTENSION) : pathinfo($share->filename, PATHINFO_EXTENSION);
+            if (!empty($extension) && !preg_match("/\.$extension$/i", $fileName)) {
+                $fileName .= '.' . $extension;
             }
         }
 

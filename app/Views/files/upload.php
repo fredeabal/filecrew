@@ -61,25 +61,40 @@
                             </div>
                         </div>
 
-                        <hr class="my-4">
-
                         <!-- Ajustes de Seguridad y Expiración -->
                         <h5 class="fw-semibold mb-3">Opciones de Compartición</h5>
                         
                         <div class="row mb-3">
-                            <!-- Nombre Personalizado -->
+                            <!-- Nombre del Archivo -->
+                            <div class="col-md-12 mb-3">
+                                <label for="filename" class="form-label fw-semibold">Nombre del Archivo</label>
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden">
+                                    <span class="text-primary ps-3 pe-2"><i class="ti ti-file-description"></i></span>
+                                    <input type="text" name="filename" id="filename" placeholder="nombre-archivo" required class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <span id="filename-ext" class="pe-3 fw-bold text-muted"></span>
+                                </div>
+                                <small class="form-text text-muted mt-1" style="font-size: 0.75rem;">Se autocompletará al seleccionar un archivo.</small>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Enlace Personalizado -->
                             <div class="col-md-6 mb-3 mb-md-0">
-                                <label for="custom_slug" class="form-label fw-semibold">Nombre Personalizado (Opcional)</label>
-                                <input type="text" class="form-control" name="custom_slug" id="custom_slug" placeholder="mi-archivo">
+                                <label for="custom_slug" class="form-label fw-semibold">Enlace Personalizado (Opcional)</label>
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden">
+                                    <span class="text-primary ps-3 pe-1 text-nowrap"><?= base_url('s/') ?></span>
+                                    <input type="text" name="custom_slug" id="custom_slug" placeholder="mi-archivo" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                </div>
                                 <small class="form-text text-muted mt-1" style="font-size: 0.75rem;">Dejar vacío para generar uno aleatorio.</small>
                             </div>
 
                             <!-- Contraseña -->
                             <div class="col-md-6">
                                 <label for="password" class="form-label fw-semibold">Contraseña de acceso (Opcional)</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" name="password" id="password" placeholder="Establecer contraseña">
-                                    <button class="btn bg-transparent border text-muted" type="button" id="toggle-password">
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden">
+                                    <span class="text-primary ps-3 pe-2"><i class="ti ti-lock"></i></span>
+                                    <input type="password" name="password" id="password" placeholder="Establecer contraseña" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                    <button class="btn border-0 bg-transparent text-muted px-3" type="button" id="toggle-password">
                                         <i class="ti ti-eye"></i>
                                     </button>
                                 </div>
@@ -90,17 +105,18 @@
                             <!-- Límite de descargas -->
                             <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="download_limit" class="form-label fw-semibold">Límite máximo de descargas (Opcional)</label>
-                                <input type="number" class="form-control" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado">
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden">
+                                    <span class="text-primary ps-3 pe-2"><i class="ti ti-download"></i></span>
+                                    <input type="number" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
+                                </div>
                             </div>
 
                             <!-- Caducidad en fecha -->
                             <div class="col-md-6">
                                 <label for="expires_at" class="form-label fw-semibold">Fecha de Caducidad (Opcional)</label>
-                                <div class="input-group datepicker">
-                                    <input type="text" class="form-control" name="expires_at" id="expires_at" placeholder="Seleccionar fecha y hora" data-input>
-                                    <button class="btn bg-transparent border text-muted" type="button" data-toggle>
-                                        <i class="ti ti-calendar"></i>
-                                    </button>
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden datepicker">
+                                    <span class="text-primary ps-3 pe-2" style="cursor: pointer;" data-toggle><i class="ti ti-calendar-time"></i></span>
+                                    <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input class="px-1 py-2" style="border: none; outline: none; background: transparent; width: 100%; color: inherit;">
                                 </div>
                             </div>
                         </div>
@@ -112,8 +128,8 @@
                                     <input class="form-check-input" type="checkbox" role="switch" id="auto_destroy" name="auto_destroy" value="1" onchange="document.getElementById('auto_destroy_warning').classList.toggle('d-none', !this.checked)">
                                     <label class="form-check-label fw-semibold" for="auto_destroy">Autodestrucción</label>
                                 </div>
-                                <div id="auto_destroy_warning" class="alert alert-primary border border-primary mt-4 d-none p-2 small" role="alert">
-                                    El archivo se borrará físicamente del servidor al caducar o alcanzar su límite.
+                                <div id="auto_destroy_warning" class="text-primary mt-2 small d-none">
+                                    <i class="ti ti-info-circle me-1"></i>El archivo se borrará físicamente del servidor al caducar o alcanzar su límite.
                                 </div>
                             </div>
                         </div>
@@ -150,6 +166,20 @@ document.addEventListener("DOMContentLoaded", function() {
             infoFilename.textContent = file.name;
             infoFilesize.textContent = formatBytes(file.size);
             fileInfoBlock.classList.remove('d-none');
+            
+            // Auto-completar el nombre del archivo sin extensión
+            const filenameInput = document.getElementById('filename');
+            if (filenameInput) {
+                const lastDot = file.name.lastIndexOf('.');
+                const nameWithoutExt = lastDot !== -1 ? file.name.substring(0, lastDot) : file.name;
+                const ext = lastDot !== -1 ? file.name.substring(lastDot) : '';
+                filenameInput.value = nameWithoutExt;
+                
+                const extSpan = document.getElementById('filename-ext');
+                if (extSpan) {
+                    extSpan.textContent = ext;
+                }
+            }
         } else {
             fileInfoBlock.classList.add('d-none');
         }
