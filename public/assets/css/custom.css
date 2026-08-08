@@ -80,6 +80,15 @@
     filter: brightness(0.9);
 }
 
+.btn-outline-danger {
+    color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
+}
+.btn-outline-danger:hover {
+    background-color: var(--bs-danger) !important;
+    color: #fff !important;
+}
+
 /* Forzar Success en componentes específicos */
 .btn-success {
     background-color: var(--bs-success) !important;
