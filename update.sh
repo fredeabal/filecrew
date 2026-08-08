@@ -42,6 +42,33 @@ fi
 
 cd "$INSTALL_DIR"
 
+echo -e "${BLUE}======================================================================${NC}"
+echo -e "${YELLOW}¿El dominio, IP o protocolo (HTTP/HTTPS) de acceso ha cambiado?${NC}"
+echo -e "Si has migrado a HTTPS o cambiado de IP, introduce la nueva URL completa."
+echo -e "Ejemplo: ${GREEN}https://files.miempresa.com${NC} o ${GREEN}http://192.168.1.100${NC}"
+echo -e "(${YELLOW}Pulsa Enter si sigue siendo exactamente igual para no cambiar nada${NC})"
+read -p "Nueva URL Base: " NEW_URL
+
+if [ ! -z "$NEW_URL" ]; then
+    # Añadir barra final si no la tiene
+    if [[ "$NEW_URL" != */ ]]; then
+        NEW_URL="${NEW_URL}/"
+    fi
+    
+    # Actualizar en .env
+    sed -i "s|^app.baseURL.*|app.baseURL = '${NEW_URL}'|g" "$INSTALL_DIR/.env"
+    echo -e "${GREEN}✅ URL Base actualizada internamente a: ${NEW_URL}${NC}"
+    
+    # Actualizar server_name en Nginx si existe
+    if [ -f /etc/nginx/sites-available/filecrew ]; then
+        # Extraer dominio/ip limpio sin protocolo ni ruta
+        CLEAN_DOMAIN=$(echo "$NEW_URL" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
+        sed -i "s|server_name .*|server_name $CLEAN_DOMAIN;|g" /etc/nginx/sites-available/filecrew
+        echo -e "${GREEN}✅ Configuración de Nginx actualizada (server_name: $CLEAN_DOMAIN)${NC}"
+    fi
+    echo ""
+fi
+
 # 3. Entrar a la carpeta e iniciar actualización
 echo -e "${YELLOW}⏳ [1/5] Descargando última versión desde GitHub...${NC}"
 
@@ -56,18 +83,6 @@ git fetch origin
 git reset --hard origin/main
 
 echo -e "${YELLOW}⏳ [2/5] Actualizando dependencias de PHP (Composer)...${NC}"
-
-# Opcional: Actualizar dominio si ha cambiado
-echo ""
-echo -ne "${YELLOW}¿El dominio o subdominio ha cambiado? (s/N): ${NC}"
-read update_domain
-if [[ "$update_domain" == "s" || "$update_domain" == "S" ]]; then
-    echo -ne "${YELLOW}Introduce el nuevo dominio (ej: files.tuempresa.com): ${NC}"
-    read new_domain
-    sed -i "s|^app.baseURL = .*|app.baseURL = 'https://${new_domain}/'|" "$INSTALL_DIR/.env"
-    echo -e "${GREEN}✅ Dominio actualizado a https://${new_domain}/${NC}"
-    echo ""
-fi
 
 export COMPOSER_ALLOW_SUPERUSER=1
 composer install --no-dev --optimize-autoloader --no-interaction
