@@ -50,6 +50,7 @@ class AuthGroups extends ShieldAuthGroups
                     if (!in_array('admin.users', $dbMatrix['superadmin'])) $dbMatrix['superadmin'][] = 'admin.users';
                     if (!in_array('admin.roles', $dbMatrix['superadmin'])) $dbMatrix['superadmin'][] = 'admin.roles';
                     if (!in_array('admin.settings', $dbMatrix['superadmin'])) $dbMatrix['superadmin'][] = 'admin.settings';
+                    if (!in_array('admin.passwords', $dbMatrix['superadmin'])) $dbMatrix['superadmin'][] = 'admin.passwords';
                 }
 
                 $this->matrix = $dbMatrix;
@@ -99,9 +100,10 @@ class AuthGroups extends ShieldAuthGroups
      * If a permission is not listed here it cannot be used.
      */
     public array $permissions = [
-        'admin.users'    => 'Gestión completa de usuarios',
-        'admin.roles'    => 'Gestión de roles y permisos',
-        'admin.settings' => 'Acceso a configuración del sistema',
+        'admin.users'      => 'Gestión completa de usuarios',
+        'admin.roles'      => 'Gestión de roles y permisos',
+        'admin.settings'   => 'Acceso a configuración del sistema',
+        'admin.passwords'  => 'Gestión de contraseñas',
     ];
 
     /**

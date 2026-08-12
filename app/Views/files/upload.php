@@ -9,7 +9,7 @@
                 <nav aria-label="breadcrumb" class="d-flex justify-content-center justify-content-md-start">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="<?= base_url('dashboard') ?>">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="<?= base_url('files') ?>">Mis Archivos</a></li>
+                        <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="<?= base_url('files') ?>">Archivos</a></li>
                         <li class="breadcrumb-item text-muted" aria-current="page">Subir</li>
                     </ol>
                 </nav>
@@ -62,7 +62,7 @@
                         </div>
 
                         <!-- Ajustes de Seguridad y Expiración -->
-                        <h5 class="fw-semibold mb-3">Opciones de Compartición</h5>
+                        <h5 class="fw-semibold mb-3">Opciones para compartir</h5>
                         
                         <div class="row mb-3">
                             <!-- Nombre del Archivo -->
@@ -90,10 +90,10 @@
 
                             <!-- Contraseña -->
                             <div class="col-md-6">
-                                <label for="password" class="form-label fw-semibold">Contraseña de acceso (Opcional)</label>
+                                <label for="password" class="form-label fw-semibold">PIN de acceso (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden">
                                     <span class="text-primary ps-3 pe-2"><i class="ti ti-lock"></i></span>
-                                    <input type="password" name="password" id="password" placeholder="Establecer contraseña" class="px-1 py-2 input-transparent">
+                                    <input type="password" name="password" id="password" placeholder="Establecer PIN" class="px-1 py-2 input-transparent">
                                     <button class="btn border-0 bg-transparent text-muted px-3" type="button" id="toggle-password">
                                         <i class="ti ti-eye"></i>
                                     </button>
@@ -102,21 +102,21 @@
                         </div>
 
                         <div class="row mb-4">
-                            <!-- Límite de descargas -->
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <label for="download_limit" class="form-label fw-semibold">Límite máximo de descargas (Opcional)</label>
-                                <div class="form-control p-0 d-flex align-items-center overflow-hidden">
-                                    <span class="text-primary ps-3 pe-2"><i class="ti ti-download"></i></span>
-                                    <input type="number" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" class="px-1 py-2 input-transparent">
-                                </div>
-                            </div>
-
                             <!-- Caducidad en fecha -->
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="expires_at" class="form-label fw-semibold">Fecha de Caducidad (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden datepicker">
                                     <span class="text-primary ps-3 pe-2 cursor-pointer" data-toggle><i class="ti ti-calendar-time"></i></span>
                                     <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input class="px-1 py-2 input-transparent">
+                                </div>
+                            </div>
+
+                            <!-- Límite de descargas -->
+                            <div class="col-md-6">
+                                <label for="download_limit" class="form-label fw-semibold">Límite máximo de descargas (Opcional)</label>
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden">
+                                    <span class="text-primary ps-3 pe-2"><i class="ti ti-download"></i></span>
+                                    <input type="number" name="download_limit" id="download_limit" min="1" placeholder="Dejar vacío para ilimitado" class="px-1 py-2 input-transparent">
                                 </div>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
                                 <i class="ti ti-x me-1"></i>Cancelar
                             </a>
                             <button type="submit" class="btn btn-primary px-4">
-                                <i class="ti ti-upload me-1"></i>Subir y Generar Enlace
+                                <i class="ti ti-upload me-1"></i>Guardar
                             </button>
                         </div>
                     </form>

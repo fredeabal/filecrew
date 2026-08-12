@@ -12,13 +12,13 @@
                              FORMULARIO DE DESBLOQUEO POR CONTRASEÑA
                              ===================================================================== -->
                         <h3 class="fw-bold mb-2 text-center text-primary">Archivo Protegido</h3>
-                        <p class="text-muted mb-4 fs-3 text-center">Introduce la contraseña configurada para ver y descargar este archivo.</p>
+                        <p class="text-muted mb-4 fs-3 text-center">Introduce el PIN configurado para ver y descargar este archivo.</p>
 
                         <form action="<?= base_url('s/' . $share->slug . '/verify') ?>" method="POST" id="verify-password-form">
                             <?= csrf_field() ?>
                             <div class="mb-4">
                                 <div class="input-group">
-                                    <input type="password" class="form-control text-center" name="password" id="password" placeholder="Contraseña del archivo">
+                                    <input type="password" class="form-control text-center" name="password" id="password" placeholder="PIN de acceso">
                                     <button class="btn bg-transparent border text-muted" type="button" id="toggle-password">
                                         <i class="ti ti-eye"></i>
                                     </button>

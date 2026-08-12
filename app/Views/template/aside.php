@@ -35,9 +35,19 @@
                 <span>
                   <i class="ti ti-folder"></i>
                 </span>
-                <span class="hide-menu">Mis Archivos</span>
+                <span class="hide-menu">Archivos</span>
               </a>
             </li>
+            <?php if (auth()->user()->can('admin.passwords')): ?>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="<?= base_url('passwords') ?>" aria-expanded="false">
+                <span>
+                  <i class="ti ti-key"></i>
+                </span>
+                <span class="hide-menu">Contraseñas</span>
+              </a>
+            </li>
+            <?php endif; ?>
             <?php if (auth()->user()->can('admin.settings') || auth()->user()->can('admin.roles') || auth()->user()->can('admin.users') || auth()->user()->can('users.create')): ?>
             <li class="nav-small-cap mt-4">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>

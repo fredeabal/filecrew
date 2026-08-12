@@ -1,7 +1,7 @@
 <style>
-    .file-name-truncate { max-width: 120px; }
-    @media (min-width: 768px) { .file-name-truncate { max-width: 250px; } }
-    @media (min-width: 1200px) { .file-name-truncate { max-width: 300px; } }
+    .password-title-truncate { max-width: 120px; }
+    @media (min-width: 768px) { .password-title-truncate { max-width: 250px; } }
+    @media (min-width: 1200px) { .password-title-truncate { max-width: 300px; } }
 </style>
 
 <!-- =====================================================================
@@ -11,18 +11,18 @@
     <div class="card-body px-4 py-3">
         <div class="row align-items-center">
             <div class="col-12 col-md-8 text-center text-md-start">
-                <h4 class="fw-semibold mb-2 mb-md-8">Archivos Compartidos</h4>
+                <h4 class="fw-semibold mb-2 mb-md-8">Contraseñas Compartidas</h4>
                 <nav aria-label="breadcrumb" class="d-flex justify-content-center justify-content-md-start">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="<?= base_url('dashboard') ?>">Dashboard</a></li>
-                        <li class="breadcrumb-item text-muted" aria-current="page">Archivos</li>
+                        <li class="breadcrumb-item text-muted" aria-current="page">Contraseñas</li>
                     </ol>
                 </nav>
             </div>
             <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end align-items-center mt-3 mt-md-0">
-                <a href="<?= base_url('files/upload') ?>" class="btn btn-primary border-0 d-flex align-items-center gap-1">
-                    <i class="ti ti-upload"></i>
-                    <span>Compartir Archivo</span>
+                <a href="<?= base_url('passwords/create') ?>" class="btn btn-primary border-0 d-flex align-items-center gap-1">
+                    <i class="ti ti-lock"></i>
+                    <span>Compartir Contraseña</span>
                 </a>
             </div>
         </div>
@@ -30,7 +30,7 @@
 </div>
 
 <!-- =====================================================================
-     BUSCADOR Y TABLA DE ARCHIVOS
+     BUSCADOR Y TABLA DE CONTRASEÑAS
      ===================================================================== -->
 <div class="row">
     <div class="col-12">
@@ -38,7 +38,7 @@
             <div class="card-body">
                 <!-- Barra de Herramientas superior: Buscador -->
                 <div class="d-flex flex-wrap justify-content-end align-items-center mb-4 gap-3">
-                    <form action="<?= base_url('files') ?>" method="GET" class="d-flex align-items-center gap-2 w-100 w-md-auto search-form-responsive ms-auto">
+                    <form action="<?= base_url('passwords') ?>" method="GET" class="d-flex align-items-center gap-2 w-100 w-md-auto search-form-responsive ms-auto">
                         <div class="position-relative w-100 search-box-container">
                             <input type="text" class="form-control" name="q" placeholder="Buscar por nombre..." value="<?= esc($search ?? '') ?>">
                             <i class="ti ti-search search-icon text-muted"></i>
@@ -48,73 +48,62 @@
 
             <!-- Tabla Premium -->
             <div class="table-responsive">
-                <table class="table align-middle text-nowrap mb-0" id="files-table">
+                <table class="table align-middle text-nowrap mb-0" id="passwords-table">
                     <thead>
                         <tr>
-                            <th scope="col">Archivo</th>
+                            <th scope="col">Nombre de la Contraseña</th>
                             <th scope="col" class="text-center d-none d-lg-table-cell">Creado</th>
-                            <th scope="col" class="text-center d-none d-sm-table-cell">Tamaño</th>
-                            <th scope="col" class="text-center d-none d-md-table-cell">Descargas</th>
+                            <th scope="col" class="text-center d-none d-md-table-cell">Vistas</th>
                             <th scope="col" class="text-center d-none d-lg-table-cell">Expiración</th>
                             <th scope="col" class="text-end">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (empty($files)): ?>
+                        <?php if (empty($passwords)): ?>
                             <tr>
-                                <td colspan="6" class="text-center py-4">
-                                    <i class="ti ti-folder-off fs-10 d-block mb-2 text-muted"></i>
-                                    <span class="fw-semibold text-muted">No se encontraron archivos compartidos.</span>
-                                </td>
+                                <td colspan="5" class="text-center py-4">
+                                    <i class="ti ti-key fs-10 d-block mb-2 text-muted"></i>
+                                    <span class="fw-semibold text-muted">No se encontraron contraseñas compartidas.</span>                                </td>
                             </tr>
                         <?php else: ?>
-                            <?php foreach ($files as $file): ?>
+                            <?php foreach ($passwords as $password): ?>
                                 <?php 
-                                    // Formatear tamaño de archivo en la vista
-                                    $size = $file->file_size;
-                                    $units = ['B', 'KB', 'MB', 'GB'];
-                                    $pow = floor(($size ? log($size) : 0) / log(1024));
-                                    $pow = min($pow, count($units) - 1);
-                                    $size /= pow(1024, $pow);
-                                    $sizeFormatted = round($size, 2) . ' ' . $units[$pow];
-
                                     // Determinar si ha caducado
                                     $expired = false;
-                                    if (!empty($file->expires_at) && strtotime($file->expires_at) < time()) {
+                                    if (!empty($password->expires_at) && strtotime($password->expires_at) < time()) {
                                         $expired = true;
                                     }
-                                    if (!empty($file->download_limit) && $file->download_count >= $file->download_limit) {
+                                    if (!empty($password->view_limit) && $password->view_count >= $password->view_limit) {
                                         $expired = true;
                                     }
                                 ?>
-                                <tr class="cursor-pointer" onclick="window.location='<?= base_url('files/edit/' . $file->id) ?>'">
+                                <tr class="cursor-pointer" onclick="window.location='<?= base_url('passwords/edit/' . $password->id) ?>'">
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="p-2 <?= !empty($file->password) ? 'bg-light-warning text-warning' : 'bg-light-primary text-primary' ?> rounded d-none d-sm-flex align-items-center justify-content-center network-icon-circle">
-                                                <i class="ti <?= !empty($file->password) ? 'ti-lock' : 'ti-file-text' ?> fs-6"></i>
+                                            <div class="p-2 <?= !empty($password->password) ? 'bg-light-warning text-warning' : 'bg-light-primary text-primary' ?> rounded d-none d-sm-flex align-items-center justify-content-center network-icon-circle">
+                                                <i class="ti <?= !empty($password->password) ? 'ti-lock-access' : 'ti-key' ?> fs-6"></i>
                                             </div>
                                             <div>
-                                                <h6 class="mb-0 fw-semibold text-truncate file-name-truncate">
-                                                    <?= esc($file->filename) ?>
+                                                <h6 class="mb-0 fw-semibold text-truncate password-title-truncate">
+                                                    <?= esc($password->title) ?>
                                                 </h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-center d-none d-lg-table-cell">
-                                        <h6 class="fs-3 fw-semibold mb-0"><?= date('d/m/Y', strtotime($file->created_at)) ?></h6>
-                                        <span class="fw-normal text-muted text-login-time"><?= date('H:i', strtotime($file->created_at)) ?></span>
+                                        <h6 class="fs-3 fw-semibold mb-0"><?= date('d/m/Y', strtotime($password->created_at)) ?></h6>
+                                        <span class="fw-normal text-muted text-login-time"><?= date('H:i', strtotime($password->created_at)) ?></span>
                                     </td>
-                                    <td class="text-center d-none d-sm-table-cell"><?= $sizeFormatted ?></td>
                                     <td class="text-center d-none d-md-table-cell">
                                         <div class="d-flex align-items-center justify-content-center gap-2">
-                                            <span class="fw-semibold"><?= esc($file->download_count) ?></span>
+                                            <span class="fw-semibold"><?= esc($password->view_count) ?></span>
                                             <span class="text-muted">/</span>
-                                            <span class="text-muted"><?= !empty($file->download_limit) ? esc($file->download_limit) : '∞' ?></span>
+                                            <span class="text-muted"><?= !empty($password->view_limit) ? esc($password->view_limit) : '∞' ?></span>
                                         </div>
                                     </td>
                                     <td class="text-center d-none d-lg-table-cell">
                                         <?php 
-                                            $expiresAt = !empty($file->expires_at) ? strtotime($file->expires_at) : null;
+                                            $expiresAt = !empty($password->expires_at) ? strtotime($password->expires_at) : null;
                                             
                                             if ($expired): 
                                         ?>
@@ -138,29 +127,24 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
-                                                    <a href="<?= base_url('files/download/' . $file->id) ?>" class="dropdown-item d-flex align-items-center gap-2">
-                                                        <i class="ti ti-download"></i> Descargar
+                                                    <a href="<?= base_url('passwords/edit/' . $password->id) ?>" class="dropdown-item d-flex align-items-center gap-2">
+                                                        <i class="ti ti-pencil"></i> Editar Ajustes
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= base_url('files/edit/' . $file->id) ?>" class="dropdown-item d-flex align-items-center gap-2">
-                                                        <i class="ti ti-pencil"></i> Editar
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <button type="button" class="dropdown-item d-flex align-items-center gap-2" onclick="copyShareLink('<?= base_url('s/' . $file->slug) ?>')">
+                                                    <button type="button" class="dropdown-item d-flex align-items-center gap-2" onclick="copyShareLink('<?= base_url('pwd/' . $password->slug) ?>')">
                                                         <i class="ti ti-link"></i> Copiar Enlace
                                                     </button>
                                                 </li>
                                                 <li>
                                                     <button type="button" class="dropdown-item d-flex align-items-center gap-2 btn-send-email" 
-                                                            data-id="<?= $file->id ?>" 
-                                                            data-filename="<?= esc($file->filename) ?>">
+                                                            data-id="<?= $password->id ?>" 
+                                                            data-title="<?= esc($password->title ?: 'Contraseña sin título') ?>">
                                                         <i class="ti ti-mail"></i> Enviar por Correo
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <form action="<?= base_url('files/delete/' . $file->id) ?>" method="POST" class="d-inline" data-confirm="Esta acción borrará físicamente el archivo del servidor y caducará el enlace de compartición.">
+                                                    <form action="<?= base_url('passwords/delete/' . $password->id) ?>" method="POST" class="d-inline" data-confirm="Esta acción borrará físicamente la contraseña y caducará el enlace de compartición.">
                                                         <?= csrf_field() ?>
                                                         <button type="submit" class="dropdown-item d-flex align-items-center gap-2 text-danger w-100 border-0 bg-transparent text-start">
                                                             <i class="ti ti-trash"></i> Eliminar
@@ -179,11 +163,12 @@
 
             <!-- Paginación -->
             <div class="d-flex justify-content-center mt-4">
-                <?= $pager->links('files', 'default_full') ?>
+                <?= $pager->links('passwords', 'default_full') ?>
             </div>
         </div>
     </div>
 </div>
+
 <!-- =====================================================================
      MODAL PARA ENVIAR CORREO
      ===================================================================== -->
@@ -198,8 +183,8 @@
                 <?= csrf_field() ?>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label text-muted">Archivo seleccionado</label>
-                        <input type="text" class="form-control bg-light" id="selected-file-name" readonly>
+                        <label class="form-label text-muted">Contraseña seleccionada</label>
+                        <input type="text" class="form-control bg-light" id="selected-password-title" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="recipient_email" class="form-label">Correo electrónico del destinatario</label>
@@ -224,21 +209,21 @@ document.addEventListener("DOMContentLoaded", function() {
     // 1. Lógica para configurar y abrir el modal de envío de email
     const emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
     const emailForm = document.getElementById('emailForm');
-    const selectedFileField = document.getElementById('selected-file-name');
+    const selectedPasswordField = document.getElementById('selected-password-title');
     
     document.querySelectorAll('.btn-send-email').forEach(button => {
         button.addEventListener('click', function() {
             const id = this.getAttribute('data-id');
-            const filename = this.getAttribute('data-filename');
+            const title = this.getAttribute('data-title');
             
-            selectedFileField.value = filename;
-            emailForm.action = `<?= base_url('files/send-email') ?>/${id}`;
+            selectedPasswordField.value = title;
+            emailForm.action = `<?= base_url('passwords/send-email') ?>/${id}`;
             emailModal.show();
         });
     });
 });
 
-// 3. Copiar enlace al portapapeles
+// 2. Copiar enlace al portapapeles
 function copyShareLink(url) {
     navigator.clipboard.writeText(url).then(() => {
         if (window.systemAlert) {

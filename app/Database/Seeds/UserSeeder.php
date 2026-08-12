@@ -43,6 +43,7 @@ class UserSeeder extends Seeder
             ['group' => 'superadmin', 'permission' => 'admin.users'],
             ['group' => 'superadmin', 'permission' => 'admin.roles'],
             ['group' => 'superadmin', 'permission' => 'admin.settings'],
+            ['group' => 'superadmin', 'permission' => 'admin.passwords'],
             
             // Permisos de Supervisor
             ['group' => 'supervisor', 'permission' => 'admin.users'],

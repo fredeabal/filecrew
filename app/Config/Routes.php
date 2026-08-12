@@ -26,6 +26,15 @@ $routes->group('', ['filter' => 'session'], static function ($routes) {
     $routes->post('files/update/(:num)', 'FileShareController::update/$1');
     $routes->post('files/delete/(:num)', 'FileShareController::delete/$1');
     $routes->post('files/send-email/(:num)', 'FileShareController::sendEmail/$1');
+
+    // Gestión de Contraseñas Compartidas
+    $routes->get('passwords', 'PasswordShareController::index', ['filter' => 'permission:admin.passwords']);
+    $routes->get('passwords/create', 'PasswordShareController::create', ['filter' => 'permission:admin.passwords']);
+    $routes->post('passwords/store', 'PasswordShareController::store', ['filter' => 'permission:admin.passwords']);
+    $routes->get('passwords/edit/(:num)', 'PasswordShareController::edit/$1', ['filter' => 'permission:admin.passwords']);
+    $routes->post('passwords/update/(:num)', 'PasswordShareController::update/$1', ['filter' => 'permission:admin.passwords']);
+    $routes->post('passwords/delete/(:num)', 'PasswordShareController::delete/$1', ['filter' => 'permission:admin.passwords']);
+    $routes->post('passwords/send-email/(:num)', 'PasswordShareController::sendEmail/$1', ['filter' => 'permission:admin.passwords']);
 });
 
 // Rutas de administración (requieren permisos extra)
@@ -72,4 +81,9 @@ service('auth')->routes($routes);
 $routes->get('s/(:segment)', 'FileShareController::showShare/$1');
 $routes->post('s/(:segment)/verify', 'FileShareController::verifyPassword/$1');
 $routes->get('s/(:segment)/download', 'FileShareController::download/$1');
+
+// Rutas públicas de compartición de contraseñas (FileCrew)
+$routes->get('pwd/(:segment)', 'PasswordShareController::showShare/$1');
+$routes->post('pwd/(:segment)/verify', 'PasswordShareController::verifyPassword/$1');
+$routes->get('pwd/(:segment)/reveal', 'PasswordShareController::revealShare/$1');
 

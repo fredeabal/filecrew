@@ -43,20 +43,22 @@
                                 <div class="row">
                                     <?php foreach ($perms as $perm): ?>
                                         <div class="col-md-6 col-lg-3 mb-3">
-                                            <div class="form-check form-switch px-4 py-2 border rounded h-100">
-                                                <input class="form-check-input ms-0 me-3 switch-custom-size" 
-                                                       type="checkbox" 
-                                                       role="switch" 
-                                                       name="permissions[]" 
-                                                       id="perm_<?= esc(str_replace('.', '_', $perm['key'])) ?>" 
-                                                       value="<?= esc($perm['key']) ?>" 
-                                                       <?= $perm['checked'] ? 'checked' : '' ?>>
-                                                <label class="form-check-label fw-medium cursor-pointer" 
-                                                       for="perm_<?= esc(str_replace('.', '_', $perm['key'])) ?>">
-                                                    <?= esc($perm['friendly']) ?>
-                                                </label>
-                                                <div class="fs-2 text-muted ms-5 mt-1"><?= esc($perm['description']) ?></div>
-                                            </div>
+                                            <label class="permission-card p-3 rounded-3 h-100 d-flex flex-column justify-content-between align-items-center text-center w-100 cursor-pointer" 
+                                                   for="perm_<?= esc(str_replace('.', '_', $perm['key'])) ?>">
+                                                <div class="mb-3">
+                                                    <span class="d-block fw-bold text-dark-emphasis mb-2"><?= esc($perm['friendly']) ?></span>
+                                                    <span class="d-block fs-2 text-muted"><?= esc($perm['description']) ?></span>
+                                                </div>
+                                                <div class="form-check form-switch p-0 m-0 d-flex justify-content-center">
+                                                    <input class="form-check-input switch-custom-size ms-0 shadow-none" 
+                                                           type="checkbox" 
+                                                           role="switch" 
+                                                           name="permissions[]" 
+                                                           id="perm_<?= esc(str_replace('.', '_', $perm['key'])) ?>" 
+                                                           value="<?= esc($perm['key']) ?>" 
+                                                           <?= $perm['checked'] ? 'checked' : '' ?>>
+                                                </div>
+                                            </label>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>

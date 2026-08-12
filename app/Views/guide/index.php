@@ -35,7 +35,7 @@
                     <ul class="list-unstyled mb-0 fs-3 text-muted">
                         <li class="d-flex align-items-start gap-2 mb-3">
                             <i class="ti ti-circle-check text-primary fs-5 mt-1"></i>
-                            <span>Ve a <strong class="text-primary">mis archivos</strong> en el menú lateral.</span>
+                            <span>Ve a <strong class="text-primary">archivos</strong> en el menú lateral.</span>
                         </li>
                         <li class="d-flex align-items-start gap-2 mb-3">
                             <i class="ti ti-circle-check text-primary fs-5 mt-1"></i>
@@ -71,7 +71,7 @@
                     <ul class="list-unstyled mb-0 fs-3 text-muted">
                         <li class="d-flex align-items-start gap-2 mb-3">
                             <i class="ti ti-circle-check text-primary fs-5 mt-1"></i>
-                            <span>En la sección <strong class="text-primary">mis archivos</strong> encontrarás el listado completo de tus transferencias con estadísticas de descargas y fechas de expiración.</span>
+                            <span>En la sección <strong class="text-primary">archivos</strong> encontrarás el listado completo de tus transferencias con estadísticas de descargas y fechas de expiración.</span>
                         </li>
                         <li class="d-flex align-items-start gap-2 mb-3">
                             <i class="ti ti-circle-check text-primary fs-5 mt-1"></i>

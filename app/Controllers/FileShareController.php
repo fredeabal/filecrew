@@ -37,7 +37,7 @@ class FileShareController extends BaseController
         $pager = $this->fileShareModel->pager;
 
         $data = [
-            'title' => 'Mis Archivos',
+            'title' => 'Archivos',
             'files' => $files,
             'pager' => $pager,
             'search'=> $search
@@ -352,7 +352,7 @@ class FileShareController extends BaseController
             'auto_destroy'   => $autoDestroy
         ]);
 
-        return redirect()->to(base_url('files'))->with('message', 'Las opciones de compartición han sido actualizadas.');
+        return redirect()->to(base_url('files'))->with('message', 'Las opciones para compartir han sido actualizadas.');
     }
 
     // ---------------------------------------------------------------------

@@ -9,7 +9,7 @@
                 <nav aria-label="breadcrumb" class="d-flex justify-content-center justify-content-md-start">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="<?= base_url('dashboard') ?>">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="<?= base_url('files') ?>">Mis Archivos</a></li>
+                        <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="<?= base_url('files') ?>">Archivos</a></li>
                         <li class="breadcrumb-item text-muted" aria-current="page">Editar</li>
                     </ol>
                 </nav>
@@ -87,10 +87,39 @@
                             </small>
                         </div>
 
-                        <!-- Opciones de Compartición -->
+                        <!-- Opciones para compartir -->
                         <div class="row mb-4">
+                            <!-- Contraseña -->
+                            <div class="col-md-4 mb-3 mb-md-0">
+                                <label for="password" class="form-label fw-semibold">
+                                    PIN de acceso (Opcional) 
+                                </label>
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden">
+                                    <span class="text-primary ps-3 pe-2"><i class="ti ti-lock"></i></span>
+                                    <input type="password" name="password" id="password" placeholder="Establecer nuevo PIN (o dejar vacío)" class="px-1 py-2 input-transparent">
+                                    <button class="btn border-0 bg-transparent text-muted px-3" type="button" id="toggle-password">
+                                        <i class="ti ti-eye"></i>
+                                    </button>
+                                </div>
+                                <?php if (!empty($share->password)): ?>
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="remove_password" name="remove_password" value="1">
+                                        <label class="form-check-label text-danger" for="remove_password">Eliminar protección por PIN actual</label>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Fecha de expiración -->
+                            <div class="col-md-4 mb-3 mb-md-0">
+                                <label for="expires_at" class="form-label fw-semibold">Fecha de Caducidad (Opcional)</label>
+                                <div class="form-control p-0 d-flex align-items-center overflow-hidden datepicker">
+                                    <span class="text-primary ps-3 pe-2 cursor-pointer" data-toggle><i class="ti ti-calendar-time"></i></span>
+                                    <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input value="<?= !empty($share->expires_at) ? date('d/m/Y', strtotime($share->expires_at)) : '' ?>" class="px-1 py-2 input-transparent">
+                                </div>
+                            </div>
+
                             <!-- Límite de descargas -->
-                            <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="col-md-4">
                                 <label for="download_limit" class="form-label fw-semibold">Límite máximo de descargas (Opcional)</label>
                                 <div class="form-control p-0 d-flex align-items-center overflow-hidden">
                                     <span class="text-primary ps-3 pe-2"><i class="ti ti-download"></i></span>
@@ -99,16 +128,6 @@
                                 <?php if (!empty($share->download_count)): ?>
                                     <small class="text-muted d-block mt-1">Descargas actuales: <?= $share->download_count ?></small>
                                 <?php endif; ?>
-                            </div>
-
-                            <!-- Fecha de expiración -->
-                            <div class="col-md-6">
-                                <label for="expires_at" class="form-label fw-semibold">Fecha de Caducidad (Opcional)</label>
-                                <div class="form-control p-0 d-flex align-items-center overflow-hidden datepicker">
-                                    <span class="text-primary ps-3 pe-2 cursor-pointer" data-toggle><i class="ti ti-calendar-time"></i></span>
-                                    <input type="text" name="expires_at" id="expires_at" placeholder="Seleccionar fecha" autocomplete="off" data-input value="<?= !empty($share->expires_at) ? date('d/m/Y', strtotime($share->expires_at)) : '' ?>" class="px-1 py-2 input-transparent">
-                                </div>
-
                             </div>
                         </div>
 
@@ -130,21 +149,21 @@
                     <!-- Botones de Acción -->
                     <div class="d-flex justify-content-center align-items-center mt-5 gap-2">
                         <!-- Botón Cancelar -->
-                        <a href="<?= base_url('files') ?>" class="btn btn-danger px-4">
-                            <i class="ti ti-x me-1"></i>Cancelar
+                        <a href="<?= base_url('files') ?>" class="btn btn-danger px-3 px-sm-4">
+                            <i class="ti ti-x me-sm-1"></i><span class="d-none d-sm-inline">Cancelar</span>
                         </a>
 
                         <!-- Botón Borrar (Formulario propio) -->
                         <form action="<?= base_url('files/delete/' . $share->id) ?>" method="POST" class="m-0" data-confirm="Esta acción borrará físicamente el archivo del servidor y caducará el enlace de compartición. ¿Deseas continuar?">
                             <?= csrf_field() ?>
-                            <button type="submit" class="btn btn-outline-danger px-4">
-                                <i class="ti ti-trash me-1"></i>Borrar
+                            <button type="submit" class="btn btn-outline-danger px-3 px-sm-4">
+                                <i class="ti ti-trash me-sm-1"></i><span class="d-none d-sm-inline">Borrar</span>
                             </button>
                         </form>
 
                         <!-- Botón Guardar (Envía el form de edición) -->
-                        <button type="submit" form="edit-form" class="btn btn-primary px-4">
-                            <i class="ti ti-device-floppy me-1"></i>Guardar
+                        <button type="submit" form="edit-form" class="btn btn-primary px-3 px-sm-4">
+                            <i class="ti ti-device-floppy me-sm-1"></i><span class="d-none d-sm-inline">Guardar</span>
                         </button>
                     </div>
                 </div>

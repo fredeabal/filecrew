@@ -28,7 +28,7 @@
         <div class="card border shadow-none h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h6 class="card-subtitle text-muted mb-0">Mis Archivos</h6>
+                    <h6 class="card-subtitle text-muted mb-0">Archivos</h6>
                     <div class="bg-primary-subtle text-primary rounded p-2">
                         <i class="ti ti-files fs-6"></i>
                     </div>

@@ -43,6 +43,7 @@ class RolesController extends BaseController
             'admin.users'        => 'Gestionar Usuarios',
             'admin.roles'        => 'Gestionar Roles',
             'admin.settings'     => 'Ajustes del Sistema',
+            'admin.passwords'    => 'Gestionar Contraseñas',
         ];
 
         // Agrupar permisos por categoría
