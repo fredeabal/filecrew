@@ -47,6 +47,7 @@ class DashboardController extends BaseController
             $recentShares = $db->table('share_logs')
                                ->select('share_logs.*, COALESCE(users.username, \'Invitado\') as sender_username')
                                ->join('users', 'users.id = share_logs.user_id', 'left')
+                               ->where('share_logs.user_id', auth()->id())
                                ->orderBy('share_logs.created_at', 'DESC')
                                ->limit($limit)
                                ->get()
