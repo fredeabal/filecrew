@@ -60,8 +60,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 <form action="<?= url_to('\App\Controllers\UsersController::update', $user->id) ?>" method="post">
                     <?= csrf_field() ?>
                     <div class="mb-3">
-                        <label for="username" class="form-label">Nombre de Usuario</label>
+                        <label for="username" class="form-label">Nombre de Usuario (Apodo)</label>
                         <input type="text" class="form-control" id="username" name="username" value="<?= old('username', esc($user->username)) ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre Completo</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<?= old('name', esc($user->name ?? '')) ?>" placeholder="Ej: Juan Pérez">
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo Electrónico</label>

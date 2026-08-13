@@ -25,13 +25,7 @@ class PasswordShareController extends BaseController
         $this->cleanupExpiredPasswords();
 
         $userId = auth()->id();
-        $search = $this->request->getGet('q');
-
         $query = $this->passwordShareModel->where('user_id', $userId);
-
-        if (!empty($search)) {
-            $query = $query->like('title', $search);
-        }
 
         $passwords = $query->orderBy('created_at', 'DESC')->paginate($this->perPage, 'passwords');
         $pager = $this->passwordShareModel->pager;
@@ -39,8 +33,7 @@ class PasswordShareController extends BaseController
         $data = [
             'title' => 'Contraseñas',
             'passwords' => $passwords,
-            'pager' => $pager,
-            'search'=> $search
+            'pager' => $pager
         ];
 
         echo view('template/header', $data);
@@ -445,6 +438,7 @@ class PasswordShareController extends BaseController
     // ---------------------------------------------------------------------
     public function sendEmail($id)
     {
+        helper('share');
         $userId = auth()->id();
         $share = $this->passwordShareModel->where('id', $id)->where('user_id', $userId)->first();
 
@@ -468,7 +462,7 @@ class PasswordShareController extends BaseController
         }
 
         $recipient = $this->request->getPost('recipient_email');
-        $senderName = auth()->user()->name ?: auth()->user()->username;
+        $senderName = auth()->user()->username;
         $downloadUrl = base_url('pwd/' . $share->slug);
 
         $emailService = \Config\Services::email();
@@ -484,7 +478,8 @@ class PasswordShareController extends BaseController
 
         // Plantilla HTML Premium del correo
         $logoUrl = base_url('assets/images/logos/dark-logo.svg?v=' . filemtime(FCPATH . 'assets/images/logos/dark-logo.svg'));
-        $titleText = $share->title ? esc($share->title) : 'Contraseña Segura';
+        $appUrl = base_url();
+
         $messageBody = '
 <!DOCTYPE html>
 <html lang="es">
@@ -507,10 +502,10 @@ class PasswordShareController extends BaseController
                         <td align="left" style="padding: 40px;">
                             <h2 style="color: #333f52; -webkit-text-fill-color: #333f52; margin-top: 0; text-align: center; font-weight: 600;">¡Te han enviado una contraseña!</h2>
                             <p style="color: #5a6a85; -webkit-text-fill-color: #5a6a85; font-size: 16px; line-height: 1.6; text-align: center; margin-bottom: 25px;">
-                                <strong>' . esc($senderName) . '</strong> ha compartido una contraseña contigo de forma segura mediante FileCrew.
+                                <strong>' . esc($senderName) . '</strong> ha compartido una contraseña contigo de forma segura.
                             </p>
                             <div style="background-color: #ffffff; border-radius: 8px; border: 1px solid #e9ecef; padding: 20px; margin: 25px 0; text-align: center;">
-                                <p style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold; color: #2A3547; -webkit-text-fill-color: #2A3547;">' . $titleText . '</p>
+                                <p style="margin: 0; font-size: 16px; font-weight: bold; color: #2A3547; -webkit-text-fill-color: #2A3547;">' . esc($share->title) . '</p>
                             </div>
                             <div style="text-align: center; margin-bottom: 10px;">
                                 <a href="' . $downloadUrl . '" style="display: inline-block; padding: 12px 24px; background-color: #F38020; background-image: linear-gradient(#F38020, #F38020); color: #ffffff; -webkit-text-fill-color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 15px;">
@@ -538,8 +533,10 @@ class PasswordShareController extends BaseController
         $emailService->setMessage($messageBody);
 
         if ($emailService->send()) {
+            log_share($recipient, 'password', $share->title, 'success');
             return redirect()->back()->with('message', "El enlace ha sido enviado exitosamente a {$recipient}.");
         } else {
+            log_share($recipient, 'password', $share->title, 'failed');
             log_message('error', 'Error al enviar correo: ' . $emailService->printDebugger(['headers']));
             return redirect()->back()->with('error', 'Hubo un error al enviar el correo. Por favor, revisa la configuración del sistema.');
         }

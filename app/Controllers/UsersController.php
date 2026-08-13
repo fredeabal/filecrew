@@ -113,6 +113,10 @@ class UsersController extends BaseController
                     'not_in_list' => 'Este nombre de usuario no está permitido.'
                 ]
             ],
+            'name'     => [
+                'label' => 'nombre completo', 
+                'rules' => 'permit_empty|string|max_length[100]'
+            ],
             'phone' => [
                 'label' => 'teléfono', 
                 'rules' => 'permit_empty|max_length[20]|regex_match[/^\+[0-9 \-\.]{7,20}$/]',
@@ -131,6 +135,7 @@ class UsersController extends BaseController
 
         $user = new User([
             'username' => $this->request->getPost('username'),
+            'name'     => $this->request->getPost('name'),
             'email'    => $this->request->getPost('email'),
             'phone'    => $this->request->getPost('phone'),
             'password' => $this->request->getPost('password'),
@@ -213,6 +218,10 @@ class UsersController extends BaseController
                     'not_in_list' => 'Este nombre de usuario no está permitido.'
                 ]
             ],
+            'name'     => [
+                'label' => 'nombre completo', 
+                'rules' => 'permit_empty|string|max_length[100]'
+            ],
             'email'    => [
                 'label' => 'correo electrónico',
                 'rules' => 'required|valid_email|is_unique[auth_identities.secret,user_id,' . $id . ']',
@@ -246,6 +255,7 @@ class UsersController extends BaseController
 
         $user->fill([
             'username' => $this->request->getPost('username'),
+            'name'     => $this->request->getPost('name'),
             'email'    => $this->request->getPost('email'),
             'phone'    => $this->request->getPost('phone'),
         ]);

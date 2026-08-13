@@ -98,7 +98,7 @@
                             <div class="col-12">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" role="switch" id="auto_destroy" name="auto_destroy" value="1" <?= $password->auto_destroy ? 'checked' : '' ?> onchange="document.getElementById('auto_destroy_warning').classList.toggle('d-none', !this.checked)">
-                                    <label class="form-check-label fw-semibold" for="auto_destroy">Autodestrucción Completa</label>
+                                    <label class="form-check-label fw-semibold" for="auto_destroy">Autodestrucción</label>
                                 </div>
                                 <div id="auto_destroy_warning" class="text-primary mt-2 small <?= $password->auto_destroy ? '' : 'd-none' ?>">
                                     <i class="ti ti-info-circle me-1"></i>El registro cifrado se eliminará permanentemente de la base de datos al caducar o alcanzar su límite de vistas.

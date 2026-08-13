@@ -38,12 +38,12 @@
             <div class="card-body">
                 <!-- Barra de Herramientas superior: Buscador -->
                 <div class="d-flex flex-wrap justify-content-end align-items-center mb-4 gap-3">
-                    <form action="<?= base_url('files') ?>" method="GET" class="d-flex align-items-center gap-2 w-100 w-md-auto search-form-responsive ms-auto">
+                    <div class="d-flex align-items-center gap-2 w-100 w-md-auto search-form-responsive ms-auto">
                         <div class="position-relative w-100 search-box-container">
-                            <input type="text" class="form-control" name="q" placeholder="Buscar por nombre..." value="<?= esc($search ?? '') ?>">
+                            <input type="text" id="search-files" class="form-control" placeholder="Buscar por nombre...">
                             <i class="ti ti-search search-icon text-muted"></i>
                         </div>
-                    </form>
+                    </div>
                 </div>
 
             <!-- Tabla Premium -->
@@ -221,6 +221,26 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Buscador en tiempo real (lado del cliente)
+    const searchInput = document.getElementById('search-files');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const filter = this.value.toLowerCase().trim();
+            const rows = document.querySelectorAll('#files-table tbody tr');
+            
+            rows.forEach(row => {
+                const filenameEl = row.querySelector('td:first-child h6');
+                const filenameText = filenameEl ? filenameEl.textContent.toLowerCase() : '';
+                
+                if (filenameText.includes(filter)) {
+                    row.classList.remove('d-none');
+                } else {
+                    row.classList.add('d-none');
+                }
+            });
+        });
+    }
+
     // 1. Lógica para configurar y abrir el modal de envío de email
     const emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
     const emailForm = document.getElementById('emailForm');

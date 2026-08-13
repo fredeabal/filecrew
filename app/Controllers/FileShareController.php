@@ -25,13 +25,7 @@ class FileShareController extends BaseController
         $this->cleanupExpiredFiles();
 
         $userId = auth()->id();
-        $search = $this->request->getGet('q');
-
         $query = $this->fileShareModel->where('user_id', $userId);
-
-        if (!empty($search)) {
-            $query = $query->like('filename', $search);
-        }
 
         $files = $query->orderBy('created_at', 'DESC')->paginate($this->perPage, 'files');
         $pager = $this->fileShareModel->pager;
@@ -39,8 +33,7 @@ class FileShareController extends BaseController
         $data = [
             'title' => 'Archivos',
             'files' => $files,
-            'pager' => $pager,
-            'search'=> $search
+            'pager' => $pager
         ];
 
         echo view('template/header', $data);
@@ -384,6 +377,7 @@ class FileShareController extends BaseController
     // ---------------------------------------------------------------------
     public function sendEmail($id)
     {
+        helper('share');
         $userId = auth()->id();
         $share = $this->fileShareModel->where('id', $id)->where('user_id', $userId)->first();
 
@@ -407,7 +401,7 @@ class FileShareController extends BaseController
         }
 
         $recipient = $this->request->getPost('recipient_email');
-        $senderName = auth()->user()->name ?: auth()->user()->username;
+        $senderName = auth()->user()->username;
         $downloadUrl = base_url('s/' . $share->slug);
 
         $emailService = \Config\Services::email();
@@ -445,7 +439,7 @@ class FileShareController extends BaseController
                         <td align="left" style="padding: 40px;">
                             <h2 style="color: #333f52; -webkit-text-fill-color: #333f52; margin-top: 0; text-align: center; font-weight: 600;">¡Te han enviado un archivo!</h2>
                             <p style="color: #5a6a85; -webkit-text-fill-color: #5a6a85; font-size: 16px; line-height: 1.6; text-align: center; margin-bottom: 25px;">
-                                <strong>' . esc($senderName) . '</strong> ha compartido un archivo contigo de forma segura mediante FileCrew.
+                                <strong>' . esc($senderName) . '</strong> ha compartido un archivo contigo de forma segura.
                             </p>
                             <div style="background-color: #ffffff; border-radius: 8px; border: 1px solid #e9ecef; padding: 20px; margin: 25px 0; text-align: center;">
                                 <p style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold; color: #2A3547; -webkit-text-fill-color: #2A3547;">' . esc($share->filename) . '</p>
@@ -477,8 +471,10 @@ class FileShareController extends BaseController
         $emailService->setMessage($messageBody);
 
         if ($emailService->send()) {
+            log_share($recipient, 'file', $share->filename, 'success');
             return redirect()->back()->with('message', "El enlace de descarga ha sido enviado exitosamente a {$recipient}.");
         } else {
+            log_share($recipient, 'file', $share->filename, 'failed');
             log_message('error', 'Fallo al enviar correo con enlace de descarga: ' . $emailService->printDebugger(['headers']));
             return redirect()->back()->with('error', 'Fallo al enviar el correo. Por favor, revisa tus Ajustes SMTP.');
         }

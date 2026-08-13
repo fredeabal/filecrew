@@ -209,6 +209,50 @@
     background-color: #00000004 !important;
 }
 
+/* --- Estilos para Menú Desplegable (Dropdown) en Tema Claro --- */
+[data-bs-theme="light"] .dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-bs-theme="light"] .dropdown-item:not(.text-danger):not(.text-warning):not(.text-success):not(.text-info):not(.text-primary):not(.text-secondary):not(.text-muted) {
+    color: #2A3547 !important;
+}
+
+[data-bs-theme="light"] .dropdown-item:hover,
+[data-bs-theme="light"] .dropdown-item:focus {
+    background-color: var(--bs-primary-bg-subtle) !important;
+    color: var(--bs-primary) !important;
+}
+
+/* --- Estilos para Etiquetas de Control Check (Switches/Checkboxes) en Tema Claro --- */
+[data-bs-theme="light"] .form-check-label:not(.text-danger):not(.text-warning):not(.text-success):not(.text-info):not(.text-primary):not(.text-secondary):not(.text-muted) {
+    color: #2A3547 !important;
+}
+
+/* --- Estilos para Menú Desplegable (Dropdown) en Tema Oscuro --- */
+[data-bs-theme="dark"] .dropdown-menu {
+    background-color: #121a1f !important;
+    border: 1px solid #1a262d !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-item:not(.text-danger):not(.text-warning):not(.text-success):not(.text-info):not(.text-primary):not(.text-secondary):not(.text-muted) {
+    color: #a8b6c2 !important;
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-item:focus {
+    background-color: var(--bs-primary-bg-subtle) !important;
+    color: var(--bs-primary) !important;
+}
+
+/* --- Estilos para Etiquetas de Control Check (Switches/Checkboxes) en Tema Oscuro --- */
+[data-bs-theme="dark"] .form-check-label:not(.text-danger):not(.text-warning):not(.text-success):not(.text-info):not(.text-primary):not(.text-secondary):not(.text-muted) {
+    color: #a8b6c2 !important;
+}
+
 
 /* =============================================
    Premium Dark Theme Overrides (Apuestas Style)
@@ -707,4 +751,31 @@
     box-shadow: 0 0 8px rgba(var(--bs-success-rgb), 0.2) !important;
 }
 
+/* =============================================
+   Estilos de Historial de Envíos (Dashboard)
+   ============================================= */
+.avatar-icon-wrapper {
+    width: 28px;
+    height: 28px;
+}
 
+.table-row-hover {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.table-row-hover:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+[data-bs-theme="light"] .table-row-hover:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.text-truncate-max-200 {
+    max-width: 200px;
+}
+
+/* Limit size of password generator length range input */
+.pwd-length-range {
+    max-width: 300px;
+}

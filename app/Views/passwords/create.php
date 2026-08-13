@@ -5,7 +5,7 @@
     <div class="card-body px-4 py-3">
         <div class="row align-items-center">
             <div class="col-12 text-center text-md-start">
-                <h4 class="fw-semibold mb-2 mb-md-8">Compartir Contraseña</h4>
+                <h4 class="fw-semibold mb-2 mb-md-8">Crear Contraseña</h4>
                 <nav aria-label="breadcrumb" class="d-flex justify-content-center justify-content-md-start">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="<?= base_url('dashboard') ?>">Dashboard</a></li>
@@ -49,7 +49,7 @@
                                     <i class="ti ti-wand text-primary"></i> 
                                     Longitud: <strong id="pwd_length_val" class="text-primary fs-4">16</strong>
                                 </label>
-                                <input type="range" class="form-range flex-grow-1" id="pwd_length" min="8" max="64" value="16" style="max-width: 300px;">
+                                <input type="range" class="form-range flex-grow-1 pwd-length-range" id="pwd_length" min="8" max="64" value="16">
                             </div>
                             <button type="button" class="btn btn-primary btn-sm px-3" id="btn-generate">
                                 Generar
@@ -120,10 +120,10 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="auto_destroy" name="auto_destroy" value="1" checked onchange="document.getElementById('auto_destroy_warning').classList.toggle('d-none', !this.checked)">
+                                <input class="form-check-input" type="checkbox" role="switch" id="auto_destroy" name="auto_destroy" value="1" onchange="document.getElementById('auto_destroy_warning').classList.toggle('d-none', !this.checked)">
                                 <label class="form-check-label fw-semibold" for="auto_destroy">Autodestrucción</label>
                             </div>
-                            <div id="auto_destroy_warning" class="text-primary mt-2 small">
+                            <div id="auto_destroy_warning" class="text-primary mt-2 small d-none">
                                 <i class="ti ti-info-circle me-1"></i>El registro cifrado se eliminará permanentemente del servidor al caducar o alcanzar su límite.
                             </div>
                         </div>
@@ -158,7 +158,11 @@ document.addEventListener("DOMContentLoaded", function() {
     
     btnGenerate.addEventListener('click', function() {
         const length = parseInt(lengthRange.value);
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=';
+        let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=';
+        
+        // Excluir caracteres similares (i, I, 1, l, o, O, 0)
+        chars = chars.replace(/[iI1loO0]/g, '');
+
         let generated = '';
         for (let i = 0; i < length; i++) {
             generated += chars.charAt(Math.floor(Math.random() * chars.length));
