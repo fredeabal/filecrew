@@ -316,6 +316,11 @@ class UsersController extends BaseController
     {
         $user = $this->usersModel->findById($id);
         if ($user) {
+            // No permitir eliminarse a sí mismo
+            if ($user->id === auth()->id()) {
+                return redirect()->to('users')->with('error', 'No puedes eliminar tu propia cuenta.');
+            }
+
             if ($user->inGroup('superadmin') && !auth()->user()->inGroup('superadmin')) {
                 return redirect()->to('users')->with('error', 'Sin permisos para eliminar a un superadmin.');
             }
