@@ -48,7 +48,8 @@ class MaintenanceController extends BaseController
             $db->query('VACUUM;');
             return redirect()->to(base_url('settings/maintenance'))->with('message', 'La base de datos SQLite ha sido desfragmentada y optimizada correctamente.');
         } catch (\Exception $e) {
-            return redirect()->to(base_url('settings/maintenance'))->with('error', 'Error al optimizar la base de datos: ' . $e->getMessage());
+            log_message('error', '[Maintenance:optimize] ' . $e->getMessage());
+            return redirect()->to(base_url('settings/maintenance'))->with('error', 'Error al optimizar la base de datos. Revisa los logs del sistema.');
         }
     }
 
@@ -102,7 +103,8 @@ class MaintenanceController extends BaseController
             $sqlite->exec("VACUUM INTO '{$tempBackupPath}'");
             $sqlite->close();
         } catch (\Exception $e) {
-            return redirect()->to(base_url('settings/maintenance'))->with('error', 'Error al generar la copia segura: ' . $e->getMessage());
+            log_message('error', '[Maintenance:backup] ' . $e->getMessage());
+            return redirect()->to(base_url('settings/maintenance'))->with('error', 'Error al generar la copia segura. Revisa los logs del sistema.');
         }
 
         $data = file_get_contents($tempBackupPath);
@@ -154,7 +156,8 @@ class MaintenanceController extends BaseController
             }
             $sqlite->close();
         } catch (\Throwable $e) {
-            return redirect()->back()->with('error', 'Error al verificar la estructura de la base de datos: ' . $e->getMessage());
+            log_message('error', '[Maintenance:verify] ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error al verificar la estructura de la base de datos. El archivo no parece válido.');
         }
 
         // 3. Proceder con el reemplazo de la BD actual
@@ -193,7 +196,8 @@ class MaintenanceController extends BaseController
                 copy($backupPath, $dbPath);
                 unlink($backupPath);
             }
-            return redirect()->back()->with('error', 'Error al restaurar la base de datos: ' . $e->getMessage());
+            log_message('error', '[Maintenance:restore] ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error al restaurar la base de datos. Se ha revertido al estado anterior.');
         }
     }
 

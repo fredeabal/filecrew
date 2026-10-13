@@ -56,19 +56,102 @@ class FileShareController extends BaseController
     }
 
     // ---------------------------------------------------------------------
-    // Procesar la subida del archivo y guardar en BD
+    // Subida por fragmentos (Chunked Upload) para grandes archivos
+    // ---------------------------------------------------------------------
+    public function uploadChunk()
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return $this->response->setStatusCode(401)->setJSON(['success' => false, 'error' => 'No autorizado']);
+        }
+
+        $chunkIndex = (int)$this->request->getPost('chunk_index');
+        $totalChunks = (int)$this->request->getPost('total_chunks');
+        $uploadId = preg_replace('/[^a-zA-Z0-9_-]/', '', $this->request->getPost('upload_id') ?? '');
+        $fileChunk = $this->request->getFile('chunk');
+
+        if (empty($uploadId) || !$fileChunk || !$fileChunk->isValid()) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'success' => false, 
+                'error' => 'Fragmento de archivo o identificador no válido.'
+            ]);
+        }
+
+        $tempDir = WRITEPATH . 'uploads/chunks/' . $uploadId;
+        if (!is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+
+        $chunkFile = $tempDir . '/chunk_' . $chunkIndex;
+        if (file_exists($chunkFile)) {
+            unlink($chunkFile);
+        }
+
+        if (!$fileChunk->move($tempDir, 'chunk_' . $chunkIndex)) {
+            return $this->response->setStatusCode(500)->setJSON([
+                'success' => false, 
+                'error' => 'Error al almacenar el fragmento ' . $chunkIndex
+            ]);
+        }
+
+        // Si se han subido todos los fragmentos, unirlos en un único archivo
+        if ($chunkIndex === ($totalChunks - 1)) {
+            $finalStorageName = bin2hex(random_bytes(16)) . '.tmp';
+            $finalPath = WRITEPATH . 'uploads/chunks/' . $finalStorageName;
+            $out = fopen($finalPath, 'wb');
+
+            if ($out === false) {
+                return $this->response->setStatusCode(500)->setJSON([
+                    'success' => false, 
+                    'error' => 'Error al ensamblar el archivo en el servidor.'
+                ]);
+            }
+
+            for ($i = 0; $i < $totalChunks; $i++) {
+                $partPath = $tempDir . '/chunk_' . $i;
+                if (!file_exists($partPath)) {
+                    fclose($out);
+                    @unlink($finalPath);
+                    return $this->response->setStatusCode(500)->setJSON([
+                        'success' => false, 
+                        'error' => 'Falta el fragmento número ' . $i . ' para completar el ensamblado.'
+                    ]);
+                }
+
+                $in = fopen($partPath, 'rb');
+                while (!feof($in)) {
+                    $buffer = fread($in, 4096 * 64);
+                    fwrite($out, $buffer);
+                }
+                fclose($in);
+                @unlink($partPath);
+            }
+            fclose($out);
+            @rmdir($tempDir);
+
+            return $this->response->setJSON([
+                'success' => true,
+                'completed' => true,
+                'temp_storage' => $finalStorageName
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'completed' => false,
+            'chunk_index' => $chunkIndex
+        ]);
+    }
+
+    // ---------------------------------------------------------------------
+    // Procesar la subida del archivo o archivos ensamblados y guardar en BD
     // ---------------------------------------------------------------------
     public function store()
     {
+        $tempStorage = $this->request->getPost('temp_storage');
+        $isChunked = !empty($tempStorage);
+
         $validationRules = [
-            'uploaded_file' => [
-                'label' => 'archivo',
-                'rules' => 'uploaded[uploaded_file]|max_size[uploaded_file,102400]', // 100MB por defecto, ajustable
-                'errors' => [
-                    'uploaded' => 'Por favor, selecciona un archivo para subir.',
-                    'max_size' => 'El archivo supera el límite de subida permitido.'
-                ]
-            ],
             'filename' => [
                 'label' => 'nombre del archivo',
                 'rules' => 'required|max_length[255]',
@@ -103,14 +186,76 @@ class FileShareController extends BaseController
             ]
         ];
 
+        if (!$isChunked) {
+            $validationRules['uploaded_file'] = [
+                'label' => 'archivo',
+                'rules' => 'uploaded[uploaded_file]|max_size[uploaded_file,102400]',
+                'errors' => [
+                    'uploaded' => 'Por favor, selecciona al menos un archivo para subir.',
+                    'max_size' => 'El archivo supera el límite de subida directo permitido.'
+                ]
+            ];
+        }
+
         if (!$this->validate($validationRules)) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setStatusCode(422)->setJSON([
+                    'success' => false,
+                    'errors' => $this->validator->getErrors()
+                ]);
+            }
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $file = $this->request->getFile('uploaded_file');
+        $uploadPath = WRITEPATH . 'uploads/files';
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
 
-        if (!$file->isValid()) {
-            return redirect()->back()->withInput()->with('error', 'El archivo subido no es válido.');
+        $finalFileName = $this->request->getPost('filename');
+        $extension = '';
+
+        if ($isChunked) {
+            // Verificar archivo temporal ensamblado
+            $safeTempStorage = basename($tempStorage);
+            $tempFilePath = WRITEPATH . 'uploads/chunks/' . $safeTempStorage;
+
+            if (!file_exists($tempFilePath)) {
+                $err = 'No se encontró el archivo temporal ensamblado. Por favor, vuelve a intentar la subida.';
+                if ($this->request->isAJAX()) {
+                    return $this->response->setStatusCode(400)->setJSON(['success' => false, 'error' => $err]);
+                }
+                return redirect()->back()->withInput()->with('error', $err);
+            }
+
+            $fileSize = filesize($tempFilePath);
+            $extension = pathinfo($this->request->getPost('original_filename') ?? $finalFileName, PATHINFO_EXTENSION);
+            $storageName = bin2hex(random_bytes(16)) . ($extension ? '.' . $extension : '');
+            $destinationPath = $uploadPath . '/' . $storageName;
+
+            if (!rename($tempFilePath, $destinationPath)) {
+                $err = 'No se pudo mover el archivo al almacenamiento final.';
+                if ($this->request->isAJAX()) {
+                    return $this->response->setStatusCode(500)->setJSON(['success' => false, 'error' => $err]);
+                }
+                return redirect()->back()->withInput()->with('error', $err);
+            }
+
+            $mimeType = mime_content_type($destinationPath) ?: 'application/octet-stream';
+        } else {
+            $file = $this->request->getFile('uploaded_file');
+            if (!$file->isValid()) {
+                return redirect()->back()->withInput()->with('error', 'El archivo subido no es válido.');
+            }
+
+            $storageName = $file->getRandomName();
+            if (!$file->move($uploadPath, $storageName)) {
+                return redirect()->back()->withInput()->with('error', 'Fallo al guardar el archivo en el servidor.');
+            }
+
+            $fileSize = $file->getSize();
+            $mimeType = $file->getClientMimeType();
+            $extension = pathinfo($file->getClientName(), PATHINFO_EXTENSION);
         }
 
         // Obtener slug personalizado o generar uno aleatorio
@@ -121,17 +266,9 @@ class FileShareController extends BaseController
             $slug = $this->generateUniqueSlug();
         }
 
-        // Generar un nombre aleatorio de almacenamiento para evitar colisiones en disco
-        $storageName = $file->getRandomName();
-
-        // Mover archivo a la carpeta writable/uploads/files/
-        $uploadPath = WRITEPATH . 'uploads/files';
-        if (!is_dir($uploadPath)) {
-            mkdir($uploadPath, 0755, true);
-        }
-
-        if (!$file->move($uploadPath, $storageName)) {
-            return redirect()->back()->withInput()->with('error', 'Fallo al guardar el archivo en el servidor.');
+        // Asegurar que el nombre tenga la extensión adecuada si corresponde
+        if (!empty($extension) && !preg_match("/\." . preg_quote($extension, '/') . "$/i", $finalFileName)) {
+            $finalFileName .= '.' . $extension;
         }
 
         // Procesar contraseña
@@ -145,50 +282,28 @@ class FileShareController extends BaseController
         $expiresAt = null;
         $expiresAtInput = $this->request->getPost('expires_at');
         if (!empty($expiresAtInput)) {
-            $expiresAt = Time::parse($expiresAtInput)->toDateTimeString();
+            $dateObj = \DateTime::createFromFormat('d/m/Y', $expiresAtInput);
+            if ($dateObj !== false) {
+                $expiresAt = $dateObj->format('Y-m-d') . ' 23:59:59';
+            }
         }
 
-        // Obtener límite de descargas
+        // Límite de descargas
         $downloadLimit = $this->request->getPost('download_limit');
         $downloadLimit = !empty($downloadLimit) ? (int)$downloadLimit : null;
 
-        // Visibilidad pública o privada
+        // Visibilidad y autodestrucción
         $isPublic = $this->request->getPost('is_public') !== null ? (int)$this->request->getPost('is_public') : 1;
         $autoDestroy = $this->request->getPost('auto_destroy') ? 1 : 0;
-        
-        $expiresAt = $this->request->getPost('expires_at');
-        if (!empty($expiresAt)) {
-            $dateObj = \DateTime::createFromFormat('d/m/Y', $expiresAt);
-            if ($dateObj !== false) {
-                $expiresAt = $dateObj->format('Y-m-d') . ' 23:59:59';
-            } else {
-                $expiresAt = null;
-            }
-        } else {
-            $expiresAt = null;
-        }
 
-        // Nombre de archivo
-        $fileName = $this->request->getPost('filename');
-        $originalName = $file->getClientName();
-        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-        
-        if (empty($fileName)) {
-            $fileName = $originalName;
-        } else {
-            if (!empty($extension) && !preg_match("/\.$extension$/i", $fileName)) {
-                $fileName .= '.' . $extension;
-            }
-        }
-
-        // Guardar metadata en BD
+        // Guardar registro en BD
         $this->fileShareModel->save([
             'slug'           => $slug,
             'user_id'        => auth()->id(),
-            'filename'       => $fileName,
+            'filename'       => $finalFileName,
             'storage_name'   => $storageName,
-            'file_size'      => $file->getSize(),
-            'mime_type'      => $file->getClientMimeType(),
+            'file_size'      => $fileSize,
+            'mime_type'      => $mimeType,
             'password'       => $passwordHash,
             'expires_at'     => $expiresAt,
             'download_limit' => $downloadLimit,
@@ -196,6 +311,15 @@ class FileShareController extends BaseController
             'is_public'      => $isPublic,
             'auto_destroy'   => $autoDestroy
         ]);
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'success' => true,
+                'slug' => $slug,
+                'share_url' => base_url('s/' . $slug),
+                'message' => 'Transferencia completada con éxito.'
+            ]);
+        }
 
         return redirect()->to(base_url('files'))->with('message', 'Archivo subido y enlace de compartición generado exitosamente.');
     }
@@ -289,7 +413,7 @@ class FileShareController extends BaseController
         $downloadLimit = ($downloadLimit !== null && $downloadLimit !== '') ? (int)$downloadLimit : null;
 
         // Visibilidad pública o privada
-        $isPublic = $this->request->getPost('is_public') !== null ? (int)$this->request->getPost('is_public') : 0;
+        $isPublic = $this->request->getPost('is_public') !== null ? (int)$this->request->getPost('is_public') : (int)($share->is_public ?? 1);
         $autoDestroy = $this->request->getPost('auto_destroy') ? 1 : 0;
 
         // Borrar contraseña explícitamente
@@ -545,13 +669,21 @@ class FileShareController extends BaseController
         $share = $this->fileShareModel->where('slug', $slug)->first();
 
         if (!$share) {
-            return redirect()->back()->with('error', 'Archivo no encontrado.');
+            return redirect()->to(base_url('/'))->with('error', 'Archivo no encontrado.');
+        }
+
+        // Límite de intentos por IP y enlace para frenar fuerza bruta (5 por minuto)
+        $throttler = service('throttler');
+        $throttleKey = 'pwd_verify_file_' . md5($this->request->getIPAddress() . '_' . $slug);
+        if ($throttler->check($throttleKey, 5, MINUTE) === false) {
+            $seconds = max(1, (int) $throttler->getTokenTime());
+            return redirect()->to(base_url('s/' . $slug))->with('error', "Demasiados intentos. Espera {$seconds} segundos antes de volver a intentarlo.");
         }
 
         $passwordInput = $this->request->getPost('password');
 
         if (empty($passwordInput) || !password_verify($passwordInput, $share->password)) {
-            return redirect()->back()->with('error', 'Contraseña incorrecta. Inténtalo de nuevo.');
+            return redirect()->to(base_url('s/' . $slug))->with('error', 'Contraseña incorrecta. Inténtalo de nuevo.');
         }
 
         // Desbloquear en la sesión del visitante
@@ -615,7 +747,7 @@ class FileShareController extends BaseController
         ]);
 
         // Retornar archivo como stream de descarga
-        return $this->response->download($filePath, null)->setFileName($share->filename);
+        return $this->response->download($filePath, null)->setFileName($this->safeDownloadName($share->filename));
     }
 
     // ---------------------------------------------------------------------
@@ -642,7 +774,7 @@ class FileShareController extends BaseController
         }
 
         // Retornar archivo como stream de descarga
-        return $this->response->download($filePath, null)->setFileName($share->filename);
+        return $this->response->download($filePath, null)->setFileName($this->safeDownloadName($share->filename));
     }
 
     // ---------------------------------------------------------------------
@@ -695,13 +827,24 @@ class FileShareController extends BaseController
         do {
             $slug = '';
             for ($i = 0; $i < 12; $i++) {
-                $slug .= $characters[rand(0, $charactersLength - 1)];
+                $slug .= $characters[random_int(0, $charactersLength - 1)];
             }
             // Verificar unicidad en base de datos
             $exists = $this->fileShareModel->where('slug', $slug)->countAllResults() > 0;
         } while ($exists);
 
         return $slug;
+    }
+
+    // ---------------------------------------------------------------------
+    // Sanear el nombre de archivo para la cabecera Content-Disposition
+    // ---------------------------------------------------------------------
+    private function safeDownloadName(string $name): string
+    {
+        $name = preg_replace('/[\x00-\x1F\x7F"\\\\\/]/u', '', $name);
+        $name = trim((string) $name);
+
+        return $name !== '' ? $name : 'archivo';
     }
 
     // ---------------------------------------------------------------------

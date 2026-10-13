@@ -24,7 +24,11 @@
                 language: 'es',
                 autoclose: true,
                 todayHighlight: true,
-                startDate: new Date()
+                startDate: new Date(),
+                templates: {
+                    leftArrow: '<i class="ti ti-chevron-left"></i>',
+                    rightArrow: '<i class="ti ti-chevron-right"></i>'
+                }
             });
 
             // Permitir que el icono también abra el calendario

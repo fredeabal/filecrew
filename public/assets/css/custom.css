@@ -8,11 +8,11 @@
    la paleta de colores de toda la aplicación.
    ============================================= */
 :root, [data-bs-theme="dark"] {
-    /* Color Principal (Botones primarios, enlaces activos, etc. - Cloudflare Orange) */
-    --bs-primary: #F38020 !important;
-    --bs-primary-rgb: 243, 128, 32 !important;
-    --bs-primary-bg-subtle: rgba(243, 128, 32, 0.15) !important;
-    --bs-primary-text-emphasis: #c4600e !important;
+    /* Color Principal (Botones primarios, enlaces activos, etc. - Indigo / Violeta Premium) */
+    --bs-primary: #6366f1 !important;
+    --bs-primary-rgb: 99, 102, 241 !important;
+    --bs-primary-bg-subtle: rgba(99, 102, 241, 0.15) !important;
+    --bs-primary-text-emphasis: #4f46e5 !important;
 
     /* Color Secundario */
     --bs-secondary: #49beff !important;
@@ -450,7 +450,7 @@
 /* Hero Section */
 .landing-hero {
     min-height: 80vh;
-    background: radial-gradient(circle at 80% 20%, rgba(243, 128, 32, 0.08) 0%, transparent 50%),
+    background: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 10% 80%, rgba(73, 190, 255, 0.05) 0%, transparent 50%);
 }
 
@@ -467,7 +467,7 @@
 }
 
 .text-gradient {
-    background: linear-gradient(135deg, var(--bs-primary) 0%, #ff9e4f 100%);
+    background: linear-gradient(135deg, var(--bs-primary) 0%, #a855f7 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -497,7 +497,7 @@
     height: 350px;
     top: 15%;
     right: 5%;
-    background: radial-gradient(circle, rgba(243, 128, 32, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
     filter: blur(40px);
     z-index: 1;
     pointer-events: none;
@@ -593,7 +593,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 100% 0%, rgba(243, 128, 32, 0.1) 0%, transparent 60%);
+    background: radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
     pointer-events: none;
 }
 
@@ -608,7 +608,7 @@
 }
 
 .landing-btn-primary-gradient {
-    background: linear-gradient(135deg, var(--bs-primary) 0%, #ff9e4f 100%) !important;
+    background: linear-gradient(135deg, var(--bs-primary) 0%, #8b5cf6 100%) !important;
     border: none !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
@@ -695,39 +695,306 @@
 }
 
 /* =============================================
-   Bootstrap Datepicker Custom Styles
+   Bootstrap Datepicker Custom Styles (Light & Dark)
    ============================================= */
-.datepicker table tr td.today, 
-.datepicker table tr td.today:hover, 
-.datepicker table tr td.today.disabled, 
+.datepicker.dropdown-menu {
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+    font-family: inherit;
+    z-index: 1060 !important;
+}
+
+/* --- Modo Claro (Light Mode) --- */
+[data-bs-theme="light"] .datepicker.dropdown-menu,
+.datepicker.dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04) !important;
+    color: #1e293b !important;
+}
+
+[data-bs-theme="light"] .datepicker.dropdown-menu:after,
+.datepicker.dropdown-menu:after {
+    border-bottom-color: #ffffff !important;
+}
+[data-bs-theme="light"] .datepicker.dropdown-menu:before,
+.datepicker.dropdown-menu:before {
+    border-bottom-color: rgba(0, 0, 0, 0.12) !important;
+}
+[data-bs-theme="light"] .datepicker.dropdown-menu.datepicker-orient-top:after,
+.datepicker.dropdown-menu.datepicker-orient-top:after {
+    border-top-color: #ffffff !important;
+}
+[data-bs-theme="light"] .datepicker.dropdown-menu.datepicker-orient-top:before,
+.datepicker.dropdown-menu.datepicker-orient-top:before {
+    border-top-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Cabecera del calendario (Light) */
+[data-bs-theme="light"] .datepicker table thead tr th,
+.datepicker table thead tr th {
+    color: #1e293b !important;
+}
+
+[data-bs-theme="light"] .datepicker .datepicker-switch,
+.datepicker .datepicker-switch {
+    color: #1e293b !important;
+    font-weight: 700 !important;
+    font-size: 0.92rem !important;
+    border-radius: 8px !important;
+    padding: 6px 10px !important;
+    cursor: pointer !important;
+}
+
+[data-bs-theme="light"] .datepicker .prev,
+[data-bs-theme="light"] .datepicker .next,
+.datepicker .prev,
+.datepicker .next {
+    color: #475569 !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+}
+
+.datepicker .prev i,
+.datepicker .next i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    vertical-align: middle;
+}
+
+[data-bs-theme="light"] .datepicker .datepicker-switch:hover,
+[data-bs-theme="light"] .datepicker .prev:hover,
+[data-bs-theme="light"] .datepicker .next:hover,
+.datepicker .datepicker-switch:hover,
+.datepicker .prev:hover,
+.datepicker .next:hover {
+    background-color: #f1f5f9 !important;
+    color: var(--bs-primary) !important;
+}
+
+/* Días de la semana (L M X J V S D) (Light) */
+[data-bs-theme="light"] .datepicker table thead tr th.dow,
+.datepicker table thead tr th.dow {
+    color: #64748b !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    padding: 6px 0 !important;
+}
+
+/* Celdas de los días (Light) */
+.datepicker table tr td.day {
+    width: 34px !important;
+    height: 34px !important;
+    line-height: 34px !important;
+    border-radius: 8px !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    transition: all 0.15s ease !important;
+    color: #1e293b !important;
+}
+
+[data-bs-theme="light"] .datepicker table tr td.day:not(.disabled):not(.old):not(.new),
+.datepicker table tr td.day:not(.disabled):not(.old):not(.new) {
+    color: #1e293b !important;
+}
+
+[data-bs-theme="light"] .datepicker table tr td.day:not(.disabled):hover,
+[data-bs-theme="light"] .datepicker table tr td.day:not(.disabled).focused,
+.datepicker table tr td.day:not(.disabled):hover,
+.datepicker table tr td.day:not(.disabled).focused {
+    background-color: #f1f5f9 !important;
+    color: var(--bs-primary) !important;
+}
+
+/* Días adyacentes (mes anterior y posterior) (Light) */
+[data-bs-theme="light"] .datepicker table tr td.old,
+[data-bs-theme="light"] .datepicker table tr td.new,
+.datepicker table tr td.old,
+.datepicker table tr td.new {
+    color: #94a3b8 !important;
+    opacity: 0.5 !important;
+}
+
+/* Días deshabilitados (Light) */
+[data-bs-theme="light"] .datepicker table tr td.disabled,
+[data-bs-theme="light"] .datepicker table tr td.disabled:hover,
+.datepicker table tr td.disabled,
+.datepicker table tr td.disabled:hover {
+    color: #cbd5e1 !important;
+    background: transparent !important;
+    cursor: not-allowed !important;
+    opacity: 0.45 !important;
+}
+
+/* Día de hoy (Light) */
+.datepicker table tr td.today,
+.datepicker table tr td.today:hover,
+.datepicker table tr td.today.disabled,
 .datepicker table tr td.today.disabled:hover {
     background-color: var(--bs-primary-bg-subtle) !important;
-    border: 1px solid var(--bs-primary) !important;
-    color: inherit !important;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.5) !important;
+    color: var(--bs-primary) !important;
+    font-weight: 700 !important;
 }
-.datepicker table tr td.active, 
+
+/* Día activo / seleccionado (Light & Dark) */
+body .datepicker table tr td.active,
+body .datepicker table tr td.active:hover,
+body .datepicker table tr td.active.disabled,
+body .datepicker table tr td.active.disabled:hover,
+.datepicker table tr td.active,
 .datepicker table tr td.active:hover {
     background-color: var(--bs-primary) !important;
     border-color: var(--bs-primary) !important;
-    color: #fff !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 10px rgba(var(--bs-primary-rgb), 0.35) !important;
 }
 
-/* Dark Mode para el Datepicker */
-[data-bs-theme="dark"] .datepicker {
-    background-color: var(--bs-card-bg) !important;
-    border: 1px solid var(--bs-border-color) !important;
+/* Vista de meses y años (Light) */
+[data-bs-theme="light"] .datepicker table tr td span,
+.datepicker table tr td span {
+    border-radius: 8px !important;
+    color: #1e293b !important;
+    font-weight: 500 !important;
+}
+[data-bs-theme="light"] .datepicker table tr td span:hover,
+.datepicker table tr td span:hover {
+    background-color: #f1f5f9 !important;
+    color: var(--bs-primary) !important;
+}
+[data-bs-theme="light"] .datepicker table tr td span.active,
+.datepicker table tr td span.active {
+    background-color: var(--bs-primary) !important;
+    color: #ffffff !important;
+}
+
+/* Footer (Hoy / Limpiar) */
+.datepicker tfoot tr th {
+    color: var(--bs-primary) !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    padding: 8px 4px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+}
+.datepicker tfoot tr th:hover {
+    background-color: #f1f5f9 !important;
+}
+
+/* =============================================
+   Bootstrap Datepicker - Modo Oscuro (Dark Mode)
+   ============================================= */
+[data-bs-theme="dark"] .datepicker.dropdown-menu {
+    background-color: #121a1f !important;
+    border: 1px solid #1a262d !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4) !important;
     color: #f8f9fa !important;
 }
-[data-bs-theme="dark"] .datepicker table tr td.day:hover,
-[data-bs-theme="dark"] .datepicker table tr td.focused {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+
+[data-bs-theme="dark"] .datepicker.dropdown-menu:after {
+    border-bottom-color: #121a1f !important;
 }
-[data-bs-theme="dark"] .datepicker .datepicker-switch:hover, 
-[data-bs-theme="dark"] .datepicker .prev:hover, 
-[data-bs-theme="dark"] .datepicker .next:hover, 
+[data-bs-theme="dark"] .datepicker.dropdown-menu:before {
+    border-bottom-color: #1a262d !important;
+}
+[data-bs-theme="dark"] .datepicker.dropdown-menu.datepicker-orient-top:after {
+    border-top-color: #121a1f !important;
+}
+[data-bs-theme="dark"] .datepicker.dropdown-menu.datepicker-orient-top:before {
+    border-top-color: #1a262d !important;
+}
+
+/* Cabecera del calendario (Dark) */
+[data-bs-theme="dark"] .datepicker table thead tr th {
+    color: #f8fafc !important;
+}
+
+[data-bs-theme="dark"] .datepicker .datepicker-switch {
+    color: #f8fafc !important;
+    font-weight: 700 !important;
+}
+
+[data-bs-theme="dark"] .datepicker .prev,
+[data-bs-theme="dark"] .datepicker .next {
+    color: #94a3b8 !important;
+}
+
+[data-bs-theme="dark"] .datepicker .datepicker-switch:hover,
+[data-bs-theme="dark"] .datepicker .prev:hover,
+[data-bs-theme="dark"] .datepicker .next:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+}
+
+/* Días de la semana (L M X J V S D) (Dark) */
+[data-bs-theme="dark"] .datepicker table thead tr th.dow {
+    color: #94a3b8 !important;
+}
+
+/* Celdas de los días (Dark) */
+[data-bs-theme="dark"] .datepicker table tr td.day:not(.disabled):not(.old):not(.new) {
+    color: #f1f5f9 !important;
+}
+
+[data-bs-theme="dark"] .datepicker table tr td.day:not(.disabled):hover,
+[data-bs-theme="dark"] .datepicker table tr td.day:not(.disabled).focused {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+}
+
+/* Días adyacentes (mes anterior y posterior) (Dark) */
+[data-bs-theme="dark"] .datepicker table tr td.old,
+[data-bs-theme="dark"] .datepicker table tr td.new {
+    color: #64748b !important;
+    opacity: 0.4 !important;
+}
+
+/* Días deshabilitados (Dark) */
+[data-bs-theme="dark"] .datepicker table tr td.disabled,
+[data-bs-theme="dark"] .datepicker table tr td.disabled:hover {
+    color: #475569 !important;
+    background: transparent !important;
+    cursor: not-allowed !important;
+    opacity: 0.35 !important;
+}
+
+/* Día de hoy (Dark) */
+[data-bs-theme="dark"] .datepicker table tr td.today,
+[data-bs-theme="dark"] .datepicker table tr td.today:hover,
+[data-bs-theme="dark"] .datepicker table tr td.today.disabled,
+[data-bs-theme="dark"] .datepicker table tr td.today.disabled:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.2) !important;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.4) !important;
+    color: #a5b4fc !important;
+}
+
+/* Vista de meses y años (Dark) */
+[data-bs-theme="dark"] .datepicker table tr td span {
+    color: #f1f5f9 !important;
+}
+[data-bs-theme="dark"] .datepicker table tr td span:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+}
+[data-bs-theme="dark"] .datepicker table tr td span.active {
+    background-color: var(--bs-primary) !important;
+    color: #ffffff !important;
+}
+
+/* Footer (Dark) */
+[data-bs-theme="dark"] .datepicker tfoot tr th {
+    color: #a5b4fc !important;
+}
 [data-bs-theme="dark"] .datepicker tfoot tr th:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: rgba(255, 255, 255, 0.08) !important;
 }
+
 /* --- Estilos para los cards de permisos de roles --- */
 .permission-card {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -778,4 +1045,492 @@
 /* Limit size of password generator length range input */
 .pwd-length-range {
     max-width: 300px;
+}
+
+/* =============================================
+   Diseño a Ancho Completo (100% Full Width)
+   ============================================= */
+.body-wrapper > .container-fluid,
+html[data-boxed-layout="boxed"] .body-wrapper > .container-fluid,
+html[data-boxed-layout="full"] .body-wrapper > .container-fluid {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+/* =============================================
+   Estilos de Subida Estilo WeTransfer (Multi-File & Progress)
+   ============================================= */
+.upload-files-list {
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.upload-file-item {
+    transition: all 0.2s ease;
+    border: 1px solid var(--bs-border-color);
+    background-color: var(--bs-body-bg);
+}
+
+.upload-file-item:hover {
+    border-color: var(--bs-primary);
+}
+
+.upload-file-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.upload-file-main {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.upload-file-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: rgba(var(--bs-primary-rgb), 0.12);
+    color: var(--bs-primary);
+}
+
+.upload-file-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.upload-file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--bs-heading-color);
+}
+
+.upload-file-size {
+    font-size: 0.8rem;
+    color: var(--bs-secondary-color);
+}
+
+.upload-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    z-index: 1060;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-progress-card {
+    background-color: var(--bs-card-bg, #ffffff);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    max-width: 480px;
+    padding: 2.2rem 2rem;
+}
+
+.circular-progress-wrap {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto;
+}
+
+.circular-progress-svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.circular-progress-bg {
+    fill: none;
+    stroke: var(--bs-border-color);
+    stroke-width: 8;
+}
+
+.circular-progress-bar {
+    fill: none;
+    stroke: var(--bs-primary);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 377;
+    stroke-dashoffset: 377;
+    transition: stroke-dashoffset 0.2s linear;
+}
+
+.circular-progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--bs-heading-color);
+}
+
+/* Modal de éxito de transferencia estilo WeTransfer */
+.transfer-success-icon-wrap {
+    width: 84px;
+    height: 84px;
+    background: rgba(var(--bs-primary-rgb), 0.12);
+    border: 2px solid rgba(var(--bs-primary-rgb), 0.3);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bs-primary);
+    box-shadow: 0 0 20px rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.transfer-link-box {
+    text-align: left;
+}
+
+.transfer-link-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bs-secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.transfer-link-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    background-color: var(--bs-secondary-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.transfer-link-row:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.12);
+}
+
+.transfer-link-icon {
+    color: var(--bs-primary);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.transfer-link-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--bs-heading-color);
+    text-decoration: none;
+}
+
+.transfer-link-text:hover {
+    color: var(--bs-primary);
+}
+
+.transfer-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    padding: 0.65rem 1.25rem;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.transfer-btn:hover {
+    transform: translateY(-1px);
+}
+
+.transfer-btn.is-copied {
+    background-color: var(--bs-success) !important;
+    border-color: var(--bs-success) !important;
+}
+
+.btn.transfer-btn-secondary {
+    background-color: #eef1f5 !important;
+    color: #2a3547 !important;
+    border: 1px solid #cfd6df !important;
+}
+
+.btn.transfer-btn-secondary:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.12) !important;
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+
+[data-bs-theme="dark"] .btn.transfer-btn-secondary {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    color: #e6edf3 !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+[data-bs-theme="dark"] .btn.transfer-btn-secondary:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.18) !important;
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+
+.transfer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+/* =============================================
+   Mejoras UX/UI para Últimos Envíos Realizados (Dashboard)
+   ============================================= */
+.dashboard-table-card {
+    border-radius: 14px;
+    border: 1px solid var(--bs-border-color);
+}
+
+.dashboard-table-header {
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.dashboard-search-wrap {
+    min-width: 240px;
+}
+
+.dashboard-item-title {
+    max-width: 220px;
+}
+@media (min-width: 992px) {
+    .dashboard-item-title {
+        max-width: 320px;
+    }
+}
+
+.dashboard-email-truncate {
+    max-width: 170px;
+}
+@media (min-width: 768px) {
+    .dashboard-email-truncate {
+        max-width: 240px;
+    }
+}
+
+.dashboard-email-badge {
+    padding: 0.35rem 0.65rem;
+    border-radius: 8px;
+    background-color: var(--bs-tertiary-bg);
+    border: 1px solid var(--bs-border-color-translucent);
+    transition: all 0.2s ease;
+}
+.dashboard-email-badge:hover {
+    border-color: rgba(var(--bs-primary-rgb), 0.4);
+}
+
+.dashboard-empty-desc {
+    max-width: 440px;
+}
+
+.status-pill,
+.action-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 115px;
+    min-width: 115px;
+    height: 32px;
+    padding: 0 0.5rem;
+    border-radius: 50rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.2px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.status-pill.status-success {
+    background-color: var(--bs-success-bg-subtle) !important;
+    color: var(--bs-success) !important;
+    border: 1px solid rgba(var(--bs-success-rgb), 0.3);
+}
+
+.status-pill.status-danger {
+    background-color: var(--bs-danger-bg-subtle) !important;
+    color: var(--bs-danger) !important;
+    border: 1px solid rgba(var(--bs-danger-rgb), 0.3);
+}
+
+.action-pill {
+    background-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.action-pill:hover {
+    background-color: var(--bs-primary);
+    color: #ffffff !important;
+    border-color: var(--bs-primary);
+    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3);
+    transform: translateY(-1px);
+}
+
+
+.copy-btn-feedback {
+    cursor: pointer;
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+.copy-btn-feedback:active {
+    transform: scale(0.9);
+}
+
+/* =============================================
+   Truncado de Títulos (Reubicado desde vistas - Regla 9)
+   ============================================= */
+.file-name-truncate,
+.password-title-truncate {
+    max-width: 150px;
+}
+@media (min-width: 768px) {
+    .file-name-truncate,
+    .password-title-truncate {
+        max-width: 260px;
+    }
+}
+@media (min-width: 1200px) {
+    .file-name-truncate,
+    .password-title-truncate {
+        max-width: 320px;
+    }
+}
+
+/* =============================================
+   Transformación de Tablas a Cards y Optimización en Móvil (< 768px)
+   ============================================= */
+@media (max-width: 767.98px) {
+    /* Reducir márgenes laterales para aprovechar al máximo la pantalla móvil */
+    .body-wrapper > .container-fluid,
+    .page-wrapper .body-wrapper > .container-fluid {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .body-wrapper > .container-fluid > .row {
+        margin-left: -10px !important;
+        margin-right: -10px !important;
+    }
+
+    .body-wrapper > .container-fluid > .row > [class*="col-"] {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    /* Estandarizar padding interno de todas las cards en móvil */
+    .card-body,
+    .card-body.px-4,
+    .card-body.p-4 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Títulos de tarjetas móviles con salto de línea seguro */
+    .file-card-title,
+    .password-card-title,
+    .dashboard-card-title {
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1.35;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        hyphens: none;
+    }
+
+    /* Badge compacto al fondo de la tarjeta en móvil */
+    .card-badge-mobile {
+        font-size: 0.7rem;
+        font-weight: 500;
+        padding: 0.18rem 0.5rem;
+        border-radius: 5px;
+        letter-spacing: 0.2px;
+    }
+}
+
+/* =========================================================================
+   Estilos de Pantalla de Login Split-Screen & Partículas (Inspirado en Deca)
+   ========================================================================= */
+.auth-brand-panel {
+    background: #6366f1;
+}
+
+.auth-headline {
+    line-height: 1.15;
+    letter-spacing: -1.2px;
+}
+
+.auth-subtitle {
+    max-width: 580px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.auth-left-content {
+    max-width: 680px;
+    width: 100%;
+}
+
+.auth-max-width {
+    max-width: 440px;
+}
+
+.login-logo {
+    max-height: 42px;
+    width: auto;
+}
+
+.btn-toggle-password {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-bs-theme="dark"] .btn-toggle-password {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+[data-bs-theme="dark"] .btn-toggle-password:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Conmutación de logos solo en el login (el resto de la app la gestiona theme/app.min.js) */
+.auth-max-width .light-logo {
+    display: none;
+}
+
+[data-bs-theme="dark"] .auth-max-width .dark-logo {
+    display: none;
+}
+
+[data-bs-theme="dark"] .auth-max-width .light-logo {
+    display: inline-block;
 }

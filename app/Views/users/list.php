@@ -46,8 +46,8 @@
                         <?= !empty($search) ? 'No se encontraron usuarios para tu búsqueda.' : 'No hay otros usuarios registrados en el sistema.' ?>
                     </div>
                 <?php else: ?>
-                <div class="table-responsive-lg">
-                    <table class="table table-hover align-middle text-nowrap text-center" id="users-table">
+                <div class="table-responsive-lg has-cards-mobile">
+                    <table class="table table-hover align-middle text-nowrap text-center table-cards-mobile" id="users-table">
                         <thead>
                             <tr>
                                 <th class="text-start">Usuario</th>
@@ -61,7 +61,7 @@
                         <tbody>
                             <?php foreach ($users as $user): ?>
                              <tr onclick="window.location='<?= site_url('users/edit/' . $user->id) ?>'" class="cursor-pointer">
-                                 <td>
+                                 <td class="text-start card-primary-cell">
                                      <div class="d-flex align-items-center">
                                          <img src="<?= !empty($user->profile_pic) ? base_url('uploads/profile/' . esc($user->profile_pic)) : base_url('assets/images/profile/user-default.png') ?>" alt="Avatar" class="rounded-circle me-3 object-fit-cover" width="40" height="40" />
                                          <div class="text-start">
@@ -70,30 +70,29 @@
                                                      <?= esc($user->username) ?>
                                                  </a>
                                              </div>
-                                             <div class="text-muted d-md-none text-login-time"><?= esc($user->email) ?></div>
                                          </div>
                                      </div>
                                  </td>
-                                <td class="text-start d-none d-md-table-cell">
+                                <td class="text-start card-meta-cell" data-label="Email">
                                     <?= esc($user->email) ?>
                                 </td>
-                                <td class="text-muted text-center d-none d-md-table-cell">
+                                <td class="text-muted text-center card-meta-cell d-none d-md-table-cell" data-label="Rol">
                                     <?= esc($user->groupTitle) ?>
                                 </td>
-                                <td class="text-center d-none d-lg-table-cell">
+                                <td class="text-center card-meta-cell d-none d-lg-table-cell" data-label="Último Acceso">
                                     <h6 class="fs-3 fw-semibold mb-0"><?= esc($user->lastLoginDate) ?></h6>
                                     <?php if (!empty($user->lastLoginTime)): ?>
                                         <span class="fw-normal text-muted text-login-time"><?= esc($user->lastLoginTime) ?></span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-center d-none d-md-table-cell">
+                                <td class="text-center card-meta-cell d-none d-md-table-cell" data-label="Estado">
                                     <?php if ($user->active): ?>
                                         <span class="badge bg-primary badge-status">Activo</span>
                                     <?php else: ?>
                                         <span class="badge bg-danger badge-status">Suspendido</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-end" onclick="event.stopPropagation();">
+                                <td class="text-end card-actions-cell" onclick="event.stopPropagation();">
                                     <div class="dropdown">
                                         <button class="btn btn-sm bg-transparent border-0 text-muted shadow-none p-1" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-popper-config='{"strategy":"fixed"}'>
                                             <i class="ti ti-dots-vertical fs-5"></i>

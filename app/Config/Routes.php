@@ -20,6 +20,7 @@ $routes->group('', ['filter' => 'session'], static function ($routes) {
     // Gestión de Archivos Compartidos (FileCrew)
     $routes->get('files', 'FileShareController::index');
     $routes->get('files/upload', 'FileShareController::upload');
+    $routes->post('files/upload-chunk', 'FileShareController::uploadChunk');
     $routes->post('files/store', 'FileShareController::store');
     $routes->get('files/edit/(:num)', 'FileShareController::edit/$1');
     $routes->get('files/download/(:num)', 'FileShareController::ownerDownload/$1');

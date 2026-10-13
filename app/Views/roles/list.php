@@ -28,8 +28,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table align-middle text-nowrap" id="roles-table">
+                <div class="table-responsive has-cards-mobile">
+                    <table class="table align-middle text-nowrap table-cards-mobile" id="roles-table">
                         <thead>
                             <tr>
                                 <th class="text-start">Rol</th>
@@ -40,13 +40,13 @@
                         <tbody>
                             <?php foreach($groups as $key => $group): ?>
                             <tr onclick="window.location='<?= base_url('roles/edit/' . esc($key)) ?>'" class="cursor-pointer">
-                                <td class="text-start">
+                                <td class="text-start card-primary-cell">
                                     <div class="fw-bold text-start text-primary-hover"><?= esc($group['title']) ?></div>
                                 </td>
-                                <td class="text-start d-none d-md-table-cell">
+                                <td class="text-start card-meta-cell d-none d-md-table-cell" data-label="Descripción">
                                     <?= esc($group['description']) ?>
                                 </td>
-                                <td class="text-end" onclick="event.stopPropagation();">
+                                <td class="text-end card-actions-cell" onclick="event.stopPropagation();">
                                     <div class="dropdown">
                                         <button class="btn btn-sm bg-transparent border-0 text-muted shadow-none p-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="ti ti-dots-vertical fs-5"></i>

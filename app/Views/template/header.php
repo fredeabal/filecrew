@@ -2,7 +2,7 @@
      CABECERA PRINCIPAL (HEADER)
      ===================================================================== -->
 <!DOCTYPE html>
-<html lang="es" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+<html lang="es" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical" data-boxed-layout="full" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
 <?php 
   $currentUser = auth()->user();
   $avatarUrl = base_url('assets/images/profile/user-default.png');
@@ -45,15 +45,15 @@
   <!-- Icono Favicon -->
   <link rel="shortcut icon" type="image/png" href="<?= base_url('assets/') ?>images/logos/favicon.png" />
 
+  <!-- Bootstrap Datepicker -->
+  <link rel="stylesheet" href="<?= base_url('assets/') ?>libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
   <!-- CSS Principal -->
   <link rel="stylesheet" href="<?= base_url('assets/') ?>css/styles.css?v=<?= filemtime(FCPATH . 'assets/css/styles.css') ?>" />
   <link rel="stylesheet" href="<?= base_url('assets/') ?>css/custom.css?v=<?= filemtime(FCPATH . 'assets/css/custom.css') ?>" />
   <link rel="stylesheet" href="<?= base_url('assets/libs/sweetalert2/dist/sweetalert2.min.css') ?>" />
-  
-  <!-- Bootstrap Datepicker -->
-  <link rel="stylesheet" href="<?= base_url('assets/') ?>libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 
-  <title><?= isset($title) ? $title . ' | FileCrew' : 'FileCrew | Share Files' ?></title>
+  <title><?= isset($title) ? esc($title) . ' | FileCrew' : 'FileCrew | Share Files' ?></title>
 </head>
 
 <body>

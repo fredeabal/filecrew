@@ -337,7 +337,8 @@ class UsersController extends BaseController
                 $this->usersModel->delete($user->id, true);
                 return redirect()->to('users')->with('message', 'Usuario eliminado.');
             } catch (\Throwable $e) {
-                return redirect()->to('users')->with('error', 'Error al eliminar usuario: ' . $e->getMessage());
+                log_message('error', '[UserDelete] ' . $e->getMessage());
+                return redirect()->to('users')->with('error', 'No se pudo eliminar el usuario. Inténtalo de nuevo.');
             }
         }
 

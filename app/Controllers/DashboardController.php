@@ -38,9 +38,8 @@ class DashboardController extends BaseController
         $bytes = $bytes > 0 ? $bytes / pow(1024, $pow) : 0;
         $data['spaceUsed'] = round($bytes, 2) . ' ' . $units[$pow];
 
-        // Consultar los últimos logs de envío con límite dinámico
-        $limit = $this->request->getGet('limit') ?: 10;
-        $limit = max(5, min(100, (int)$limit));
+        // Consultar los últimos 25 logs de envío realizados
+        $limit = 25;
 
         $recentShares = [];
         try {
@@ -55,9 +54,41 @@ class DashboardController extends BaseController
         } catch (\Exception $e) {
             log_message('error', 'Error al consultar share_logs en Dashboard: ' . $e->getMessage());
         }
+
+        // Vincular recurso original para permitir acciones directas (editar, descargar, copiar enlace)
+        foreach ($recentShares as $log) {
+            $log->resource_id   = null;
+            $log->resource_slug = null;
+            if ($log->resource_type === 'file') {
+                $file = $db->table('file_shares')
+                           ->select('id, slug')
+                           ->where('user_id', $log->user_id)
+                           ->where('filename', $log->resource_name)
+                           ->orderBy('id', 'DESC')
+                           ->get(1)
+                           ->getRow();
+                if ($file) {
+                    $log->resource_id   = $file->id;
+                    $log->resource_slug = $file->slug;
+                }
+            } elseif ($log->resource_type === 'password') {
+                $pwd = $db->table('password_shares')
+                          ->select('id, slug')
+                          ->where('user_id', $log->user_id)
+                          ->where('title', $log->resource_name)
+                          ->orderBy('id', 'DESC')
+                          ->get(1)
+                          ->getRow();
+                if ($pwd) {
+                    $log->resource_id   = $pwd->id;
+                    $log->resource_slug = $pwd->slug;
+                }
+            }
+        }
         
-        $data['recentShares'] = $recentShares;
-        $data['limit']        = $limit;
+        $data['recentShares']     = $recentShares;
+        $data['limit']            = $limit;
+        $data['totalRecentShares'] = $db->table('share_logs')->where('user_id', auth()->id())->countAllResults();
 
         echo view('template/header', $data);
         echo view('dashboards/index', $data);

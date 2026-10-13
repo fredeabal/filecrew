@@ -339,13 +339,21 @@ class PasswordShareController extends BaseController
         $password = $this->passwordShareModel->where('slug', $slug)->first();
 
         if (!$password) {
-            return redirect()->back()->with('error', 'Contraseña no encontrado.');
+            return redirect()->to(base_url('/'))->with('error', 'Contraseña no encontrado.');
+        }
+
+        // Límite de intentos por IP y enlace para frenar fuerza bruta (5 por minuto)
+        $throttler = service('throttler');
+        $throttleKey = 'pwd_verify_secret_' . md5($this->request->getIPAddress() . '_' . $slug);
+        if ($throttler->check($throttleKey, 5, MINUTE) === false) {
+            $seconds = max(1, (int) $throttler->getTokenTime());
+            return redirect()->to(base_url('pwd/' . $slug))->with('error', "Demasiados intentos. Espera {$seconds} segundos antes de volver a intentarlo.");
         }
 
         $passwordInput = $this->request->getPost('password');
 
         if (empty($passwordInput) || !password_verify($passwordInput, $password->password)) {
-            return redirect()->back()->with('error', 'Contraseña incorrecta. Inténtalo de nuevo.');
+            return redirect()->to(base_url('pwd/' . $slug))->with('error', 'Contraseña incorrecta. Inténtalo de nuevo.');
         }
 
         // Desbloquear en la sesión del visitante
@@ -577,7 +585,7 @@ class PasswordShareController extends BaseController
         do {
             $slug = '';
             for ($i = 0; $i < 12; $i++) {
-                $slug .= $characters[rand(0, $charactersLength - 1)];
+                $slug .= $characters[random_int(0, $charactersLength - 1)];
             }
             $exists = $this->passwordShareModel->where('slug', $slug)->countAllResults() > 0;
         } while ($exists);

@@ -144,7 +144,7 @@ class ProfileController extends BaseController
             ]);
         } catch (\Exception $e) {
             log_message('error', '[ProfileUpdate] ' . $e->getMessage() . ' en ' . $e->getFile() . ':' . $e->getLine());
-            return redirect()->back()->withInput()->with('error', 'Error al guardar: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'No se pudieron guardar los cambios. Inténtalo de nuevo.');
         }
 
         return redirect()->to('profile')->with('message', 'Perfil actualizado.');
