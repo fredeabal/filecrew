@@ -113,12 +113,12 @@
                                     </td>
                                     <td class="text-center">
                                         <?php if ($expired): ?>
-                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-2">Caducado</span>
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-2 badge-status">Caducado</span>
                                         <?php elseif (!empty($file->expires_at)): ?>
                                             <h6 class="fs-3 fw-semibold mb-0"><?= date('d/m/Y', strtotime($file->expires_at)) ?></h6>
                                             <span class="fw-normal text-muted text-login-time"><?= date('H:i', strtotime($file->expires_at)) ?></span>
                                         <?php else: ?>
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle fs-2">Sin expiración</span>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle fs-2 badge-status">Sin expiración</span>
                                         <?php endif; ?>
                                     </td>
                                     <td class="text-end" onclick="event.stopPropagation();">

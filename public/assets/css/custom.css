@@ -189,9 +189,13 @@
 /* --- Clases para responsive y regla 9 --- */
 .badge-status {
     display: inline-block;
-    width: 75px;
+    width: 100px;
     text-align: center;
-    font-size: 0.6rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600;
+    line-height: 1.25;
+    padding: 0.35rem 0.5rem !important;
+    border-radius: 6px !important;
 }
 
 .text-login-time {

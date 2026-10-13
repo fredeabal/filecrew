@@ -201,15 +201,9 @@
                                         <!-- Estado -->
                                         <td class="border-bottom-0 text-center">
                                             <?php if ($log->status === 'success'): ?>
-                                                <span class="status-pill status-success">
-                                                    <i class="ti ti-circle-check fs-3"></i>
-                                                    <span>Entregado</span>
-                                                </span>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle fs-2 badge-status">Entregado</span>
                                             <?php else: ?>
-                                                <span class="status-pill status-danger">
-                                                    <i class="ti ti-alert-triangle fs-3"></i>
-                                                    <span>Error</span>
-                                                </span>
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-2 badge-status">Error</span>
                                             <?php endif; ?>
                                         </td>
 
@@ -358,13 +352,9 @@
 
                                     <div class="mt-2 pt-1 d-flex justify-content-end">
                                         <?php if ($log->status === 'success'): ?>
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle card-badge-mobile">
-                                                <i class="ti ti-circle-check me-1"></i>Entregado
-                                            </span>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle card-badge-mobile">Entregado</span>
                                         <?php else: ?>
-                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle card-badge-mobile">
-                                                <i class="ti ti-alert-triangle me-1"></i>Error
-                                            </span>
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle card-badge-mobile">Error</span>
                                         <?php endif; ?>
                                     </div>
                                 </div>

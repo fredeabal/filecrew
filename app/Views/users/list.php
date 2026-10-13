@@ -87,9 +87,9 @@
                                 </td>
                                 <td class="text-center card-meta-cell d-none d-md-table-cell" data-label="Estado">
                                     <?php if ($user->active): ?>
-                                        <span class="badge bg-primary badge-status">Activo</span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle fs-2 badge-status">Activo</span>
                                     <?php else: ?>
-                                        <span class="badge bg-danger badge-status">Suspendido</span>
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-2 badge-status">Suspendido</span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-end card-actions-cell" onclick="event.stopPropagation();">
