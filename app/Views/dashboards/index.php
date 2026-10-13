@@ -356,7 +356,7 @@
                                         <div><strong>Fecha:</strong> <?= date('d/m/Y H:i', strtotime($log->created_at)) ?></div>
                                     </div>
 
-                                    <div class="mt-2 pt-1">
+                                    <div class="mt-2 pt-1 d-flex justify-content-end">
                                         <?php if ($log->status === 'success'): ?>
                                             <span class="badge bg-success-subtle text-success border border-success-subtle card-badge-mobile">
                                                 <i class="ti ti-circle-check me-1"></i>Entregado

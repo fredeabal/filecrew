@@ -228,7 +228,7 @@
                                     <div><strong>Caducidad:</strong> <?= !empty($password->expires_at) ? date('d/m/Y H:i', strtotime($password->expires_at)) : 'Nunca' ?></div>
                                 </div>
 
-                                <div class="mt-2 pt-1">
+                                <div class="mt-2 pt-1 d-flex justify-content-end">
                                     <?php if ($expired): ?>
                                         <span class="badge bg-danger-subtle text-danger border border-danger-subtle card-badge-mobile">Caducado</span>
                                     <?php else: ?>
