@@ -1470,13 +1470,18 @@ html[data-boxed-layout="full"] .body-wrapper > .container-fluid {
         hyphens: none;
     }
 
-    /* Badge compacto al fondo de la tarjeta en móvil */
+    /* Badge compacto con tamaño unificado al fondo de la tarjeta en móvil */
     .card-badge-mobile {
-        font-size: 0.7rem;
+        display: inline-block;
+        width: 80px;
+        text-align: center;
+        font-size: 0.72rem;
         font-weight: 500;
-        padding: 0.18rem 0.5rem;
-        border-radius: 5px;
+        line-height: 1.25;
+        padding: 0.22rem 0.4rem;
+        border-radius: 6px;
         letter-spacing: 0.2px;
+        box-sizing: border-box;
     }
 }
 
