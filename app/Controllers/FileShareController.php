@@ -230,7 +230,7 @@ class FileShareController extends BaseController
 
             $fileSize = filesize($tempFilePath);
             $extension = pathinfo($this->request->getPost('original_filename') ?? $finalFileName, PATHINFO_EXTENSION);
-            $storageName = bin2hex(random_bytes(16)) . ($extension ? '.' . $extension : '');
+            $storageName = bin2hex(random_bytes(16));
             $destinationPath = $uploadPath . '/' . $storageName;
 
             if (!rename($tempFilePath, $destinationPath)) {
@@ -248,13 +248,14 @@ class FileShareController extends BaseController
                 return redirect()->back()->withInput()->with('error', 'El archivo subido no es válido.');
             }
 
-            $storageName = $file->getRandomName();
+            $storageName = bin2hex(random_bytes(16));
             if (!$file->move($uploadPath, $storageName)) {
                 return redirect()->back()->withInput()->with('error', 'Fallo al guardar el archivo en el servidor.');
             }
 
+            $destinationPath = $uploadPath . '/' . $storageName;
             $fileSize = $file->getSize();
-            $mimeType = $file->getClientMimeType();
+            $mimeType = mime_content_type($destinationPath) ?: ($file->getClientMimeType() ?: 'application/octet-stream');
             $extension = pathinfo($file->getClientName(), PATHINFO_EXTENSION);
         }
 
@@ -437,7 +438,7 @@ class FileShareController extends BaseController
 
             // Mover el nuevo archivo
             $uploadPath = WRITEPATH . 'uploads/files';
-            $newStorageName = $file->getRandomName();
+            $newStorageName = bin2hex(random_bytes(16));
             
             if ($file->move($uploadPath, $newStorageName)) {
                 $fileSize = $file->getSize();
@@ -501,7 +502,6 @@ class FileShareController extends BaseController
     // ---------------------------------------------------------------------
     public function sendEmail($id)
     {
-        helper('share');
         $userId = auth()->id();
         $share = $this->fileShareModel->where('id', $id)->where('user_id', $userId)->first();
 
@@ -595,10 +595,8 @@ class FileShareController extends BaseController
         $emailService->setMessage($messageBody);
 
         if ($emailService->send()) {
-            log_share($recipient, 'file', $share->filename, 'success');
             return redirect()->back()->with('message', "El enlace de descarga ha sido enviado exitosamente a {$recipient}.");
         } else {
-            log_share($recipient, 'file', $share->filename, 'failed');
             log_message('error', 'Fallo al enviar correo con enlace de descarga: ' . $emailService->printDebugger(['headers']));
             return redirect()->back()->with('error', 'Fallo al enviar el correo. Por favor, revisa tus Ajustes SMTP.');
         }

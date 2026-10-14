@@ -446,7 +446,6 @@ class PasswordShareController extends BaseController
     // ---------------------------------------------------------------------
     public function sendEmail($id)
     {
-        helper('share');
         $userId = auth()->id();
         $share = $this->passwordShareModel->where('id', $id)->where('user_id', $userId)->first();
 
@@ -541,10 +540,8 @@ class PasswordShareController extends BaseController
         $emailService->setMessage($messageBody);
 
         if ($emailService->send()) {
-            log_share($recipient, 'password', $share->title, 'success');
             return redirect()->back()->with('message', "El enlace ha sido enviado exitosamente a {$recipient}.");
         } else {
-            log_share($recipient, 'password', $share->title, 'failed');
             log_message('error', 'Error al enviar correo: ' . $emailService->printDebugger(['headers']));
             return redirect()->back()->with('error', 'Hubo un error al enviar el correo. Por favor, revisa la configuración del sistema.');
         }

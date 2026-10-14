@@ -47,20 +47,20 @@
                             
                             <!-- Bloque de información del archivo NUEVO seleccionado -->
                             <div class="mt-3 d-none" id="file-info-block-new">
-                                <div class="p-3 bg-light-primary rounded d-flex align-items-center justify-content-between border border-primary">
-                                    <div class="d-flex align-items-center gap-3 flex-grow-1 me-3">
-                                        <div class="p-2 bg-primary text-white rounded d-flex align-items-center justify-content-center file-icon-box">
+                                <div class="p-3 bg-light-primary rounded d-flex align-items-center justify-content-between border border-primary gap-2">
+                                    <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+                                        <div class="p-2 bg-primary text-white rounded d-flex align-items-center justify-content-center file-icon-box flex-shrink-0">
                                             <i class="ti ti-file-upload fs-5"></i>
                                         </div>
-                                        <div class="flex-grow-1 d-flex flex-wrap align-items-center justify-content-between gap-2">
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold text-truncate text-primary max-w-300" id="info-filename">nombre_archivo.zip</h6>
+                                        <div class="flex-grow-1 min-w-0">
+                                            <h6 class="mb-1 fw-semibold text-primary file-name-clamp" id="info-filename">nombre_archivo.zip</h6>
+                                            <div class="d-flex align-items-center gap-2 flex-wrap">
                                                 <small class="text-muted" id="info-filesize">0 KB</small>
+                                                <span class="badge bg-primary badge-replace-file">Reemplazará al actual</span>
                                             </div>
-                                            <span class="badge bg-primary badge-replace-file">Reemplazará al actual</span>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn-close" id="btn-clear-file" aria-label="Limpiar"></button>
+                                    <button type="button" class="btn-close flex-shrink-0" id="btn-clear-file" aria-label="Limpiar"></button>
                                 </div>
                             </div>
                         </div>
