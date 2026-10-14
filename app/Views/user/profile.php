@@ -38,7 +38,7 @@
             <img src="<?= $avatarUrl ?>" class="rounded-circle border border-2 border-primary mb-3 shadow-sm object-fit-cover" width="120" height="120" alt="Avatar" id="avatar-preview" />
             
             <div class="mt-2">
-              <label for="profile_pic" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
+              <label for="profile_pic" class="btn btn-primary btn-sm px-3 shadow-sm">
                 <i class="ti ti-upload me-1"></i> Seleccionar Nueva Foto
               </label>
               <input class="form-control d-none" type="file" id="profile_pic" name="profile_pic" accept="image/*" onchange="previewImage(event)">
@@ -48,62 +48,69 @@
 
           <hr class="my-4 border-light-subtle opacity-25">
 
-          <div class="mb-3">
-            <label for="username" class="form-label fw-semibold">Nombre de Usuario (Apodo)</label>
-            <input type="text" class="form-control" id="username" name="username" value="<?= old('username', esc($user->username)) ?>">
-          </div>
-          
-          <div class="mb-3">
-            <label for="name" class="form-label fw-semibold">Nombre Completo</label>
-            <input type="text" class="form-control" id="name" name="name" value="<?= old('name', esc($user->name ?? '')) ?>" placeholder="Ej: Juan Pérez">
-          </div>
+          <div class="row g-3">
+            <!-- Fila 1: Datos Personales -->
+            <div class="col-12 col-md-6">
+              <label for="username" class="form-label fw-semibold">Nombre de Usuario (Apodo)</label>
+              <input type="text" class="form-control" id="username" name="username" value="<?= old('username', esc($user->username)) ?>" placeholder="Ej. juanperez">
+            </div>
+            
+            <div class="col-12 col-md-6">
+              <label for="name" class="form-label fw-semibold">Nombre Completo</label>
+              <input type="text" class="form-control" id="name" name="name" value="<?= old('name', esc($user->name ?? '')) ?>" placeholder="Ej. Juan Pérez">
+            </div>
 
-          <div class="mb-3">
-            <label for="email" class="form-label fw-semibold">Correo Electrónico</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?= old('email', esc($user->getIdentities()[0]->secret ?? '')) ?>">
-            <div class="form-text opacity-75">Se usa para iniciar sesión.</div>
-          </div>
-          
-          <div class="mb-3">
-            <label for="phone" class="form-label fw-semibold">Número de Teléfono</label>
-            <input type="text" class="form-control" id="phone" name="phone" value="<?= old('phone', esc($user->phone ?? '')) ?>" placeholder="Ej: 600123456">
-          </div>
+            <!-- Fila 2: Contacto -->
+            <div class="col-12 col-md-6">
+              <label for="email" class="form-label fw-semibold">Correo Electrónico</label>
+              <input type="email" class="form-control" id="email" name="email" value="<?= old('email', esc($user->getIdentities()[0]->secret ?? '')) ?>" placeholder="usuario@empresa.com">
+              <div class="form-text opacity-75">Se utiliza para iniciar sesión en la plataforma.</div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+              <label for="phone" class="form-label fw-semibold">Número de Teléfono</label>
+              <input type="text" class="form-control" id="phone" name="phone" value="<?= old('phone', esc($user->phone ?? '')) ?>" placeholder="Ej. +34 600 000 000">
+            </div>
 
-          <div class="mb-3">
-            <label for="password" class="form-label fw-semibold">Nueva Contraseña</label>
-            <div class="input-group">
-              <input type="password" class="form-control" id="password" name="password" placeholder="Dejar vacío si no deseas cambiarla">
-              <button class="btn bg-transparent border text-muted" type="button" id="toggle-password">
-                <i class="ti ti-eye"></i>
-              </button>
+            <!-- Fila 3: Seguridad (Contraseñas) -->
+            <div class="col-12 col-md-6">
+              <label for="password" class="form-label fw-semibold">Nueva Contraseña</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Dejar vacío si no deseas cambiarla">
+                <button class="btn bg-transparent border text-muted" type="button" id="toggle-password">
+                  <i class="ti ti-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+              <label for="password_confirm" class="form-label fw-semibold">Confirmar Contraseña</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Repite la nueva contraseña">
+                <button class="btn bg-transparent border text-muted" type="button" id="toggle-password-confirm">
+                  <i class="ti ti-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Fila 4: Preferencias -->
+            <div class="col-12 col-md-6">
+              <label for="theme" class="form-label fw-semibold">Tema (Apariencia)</label>
+              <select class="form-select" id="theme" name="theme">
+                <option value="system" <?= old('theme', esc($user->theme ?? 'system')) === 'system' ? 'selected' : '' ?>>Automático (Sistema)</option>
+                <option value="dark" <?= old('theme', esc($user->theme ?? 'system')) === 'dark' ? 'selected' : '' ?>>Tema Oscuro</option>
+                <option value="light" <?= old('theme', esc($user->theme ?? 'system')) === 'light' ? 'selected' : '' ?>>Tema Claro</option>
+              </select>
             </div>
           </div>
-          
-          <div class="mb-3">
-            <label for="password_confirm" class="form-label fw-semibold">Confirmar Contraseña</label>
-            <div class="input-group">
-              <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Repite la nueva contraseña">
-              <button class="btn bg-transparent border text-muted" type="button" id="toggle-password-confirm">
-                <i class="ti ti-eye"></i>
-              </button>
-            </div>
-          </div>
 
-          <div class="mb-4">
-            <label for="theme" class="form-label fw-semibold">Tema (Apariencia)</label>
-            <select class="form-select" id="theme" name="theme">
-              <option value="system" <?= old('theme', esc($user->theme ?? 'system')) === 'system' ? 'selected' : '' ?>>Automático (Sistema)</option>
-              <option value="dark" <?= old('theme', esc($user->theme ?? 'system')) === 'dark' ? 'selected' : '' ?>>Tema Oscuro</option>
-              <option value="light" <?= old('theme', esc($user->theme ?? 'system')) === 'light' ? 'selected' : '' ?>>Tema Claro</option>
-            </select>
-          </div>
-
-          <div class="d-flex justify-content-center mt-5">
-            <a href="<?= base_url('dashboard') ?>" class="btn btn-danger px-4 me-2">
-                <i class="ti ti-x me-1"></i>Cancelar
+          <!-- Botones de Acción -->
+          <div class="d-flex justify-content-center gap-2 mt-5">
+            <a href="<?= base_url('dashboard') ?>" class="btn btn-dark px-4">
+                <i class="ti ti-x me-1"></i> Cancelar
             </a>
             <button type="submit" class="btn btn-primary px-4">
-                <i class="ti ti-device-floppy me-1"></i>Guardar Cambios
+                <i class="ti ti-device-floppy me-1"></i> Guardar Cambios
             </button>
           </div>
         </form>

@@ -272,10 +272,10 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center border-0 pt-0">
-                    <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">
                         <i class="ti ti-x me-1"></i> Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary px-4">
+                    <button type="submit" class="btn btn-primary px-4" id="btn-submit-pwd-email">
                         <i class="ti ti-mail me-1"></i> Enviar Correo
                     </button>
                 </div>
@@ -307,9 +307,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 1. Lógica para configurar y abrir el modal de envío de email
-    const emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
+    const emailModalEl = document.getElementById('emailModal');
+    const emailModal = new bootstrap.Modal(emailModalEl);
     const emailForm = document.getElementById('emailForm');
     const selectedPasswordField = document.getElementById('selected-password-title');
+    const submitBtn = document.getElementById('btn-submit-pwd-email');
     
     document.querySelectorAll('.btn-send-email').forEach(button => {
         button.addEventListener('click', function() {
@@ -321,6 +323,24 @@ document.addEventListener("DOMContentLoaded", function() {
             emailModal.show();
         });
     });
+
+    if (emailForm) {
+        emailForm.addEventListener('submit', function() {
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Enviando...';
+            }
+        });
+    }
+
+    if (emailModalEl) {
+        emailModalEl.addEventListener('hidden.bs.modal', function() {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="ti ti-mail me-1"></i> Enviar Correo';
+            }
+        });
+    }
 });
 
 // 2. Copiar enlace al portapapeles

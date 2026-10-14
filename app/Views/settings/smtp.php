@@ -30,29 +30,29 @@
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="fromEmail" class="form-label fw-semibold">Correo Remitente</label>
-                                <input type="email" class="form-control" id="fromEmail" name="fromEmail" value="<?= old('fromEmail', esc($fromEmail ?? '')) ?>" placeholder="Ej: no-reply@tudominio.com">
+                                <input type="email" class="form-control" id="fromEmail" name="fromEmail" value="<?= old('fromEmail', esc($fromEmail ?? '')) ?>" placeholder="no-reply@tudominio.com">
                             </div>
                             <div class="col-md-6">
                                 <label for="fromName" class="form-label fw-semibold">Nombre del Remitente</label>
-                                <input type="text" class="form-control" id="fromName" name="fromName" value="<?= old('fromName', esc($fromName ?? '')) ?>" placeholder="Ej: Mi Empresa">
+                                <input type="text" class="form-control" id="fromName" name="fromName" value="<?= old('fromName', esc($fromName ?? '')) ?>" placeholder="Ej. Mi Empresa">
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="smtp_host" class="form-label fw-semibold">Servidor SMTP (Host)</label>
-                                <input type="text" class="form-control" id="smtp_host" name="smtp_host" value="<?= old('smtp_host', esc($smtp_host ?? '')) ?>" placeholder="Ej: smtp.gmail.com">
+                                <input type="text" class="form-control" id="smtp_host" name="smtp_host" value="<?= old('smtp_host', esc($smtp_host ?? '')) ?>" placeholder="Ej. smtp.gmail.com">
                             </div>
                             <div class="col-md-6">
                                 <label for="smtp_port" class="form-label fw-semibold">Puerto SMTP</label>
-                                <input type="number" class="form-control" id="smtp_port" name="smtp_port" value="<?= old('smtp_port', esc($smtp_port ?? '')) ?>" placeholder="Ej: 587">
+                                <input type="number" class="form-control" id="smtp_port" name="smtp_port" value="<?= old('smtp_port', esc($smtp_port ?? '')) ?>" placeholder="Ej. 587">
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="smtp_user" class="form-label fw-semibold">Usuario SMTP</label>
-                                <input type="text" class="form-control" id="smtp_user" name="smtp_user" value="<?= old('smtp_user', esc($smtp_user ?? '')) ?>" placeholder="ej. correo@tudominio.com">
+                                <input type="text" class="form-control" id="smtp_user" name="smtp_user" value="<?= old('smtp_user', esc($smtp_user ?? '')) ?>" placeholder="correo@tudominio.com">
                             </div>
                             <div class="col-md-6">
                                 <label for="smtp_pass" class="form-label fw-semibold">Contraseña SMTP</label>
@@ -76,15 +76,15 @@
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-center mt-4">
-                            <a href="<?= base_url('dashboard') ?>" class="btn btn-danger px-4 me-2">
-                                <i class="ti ti-x me-1"></i>Cancelar
+                        <div class="d-flex justify-content-center gap-2 mt-4">
+                            <a href="<?= base_url('dashboard') ?>" class="btn btn-dark px-4">
+                                <i class="ti ti-x me-1"></i> Cancelar
                             </a>
-                            <button type="submit" formaction="<?= base_url('settings/smtp/test') ?>" formmethod="POST" class="btn btn-warning text-white px-4 me-2">
-                                <i class="ti ti-send me-1"></i>Probar
+                            <button type="submit" formaction="<?= base_url('settings/smtp/test') ?>" formmethod="POST" class="btn btn-outline-primary px-4" id="btn-test-smtp">
+                                <i class="ti ti-send me-1"></i> Probar
                             </button>
                             <button type="submit" class="btn btn-primary px-4">
-                                <i class="ti ti-device-floppy me-1"></i>Guardar
+                                <i class="ti ti-device-floppy me-1"></i> Guardar
                             </button>
                         </div>
                     </form>
@@ -93,3 +93,17 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const testBtn = document.getElementById('btn-test-smtp');
+    if (testBtn) {
+        testBtn.closest('form').addEventListener('submit', function(e) {
+            if (document.activeElement === testBtn) {
+                testBtn.disabled = true;
+                testBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Probando...';
+            }
+        });
+    }
+});
+</script>
